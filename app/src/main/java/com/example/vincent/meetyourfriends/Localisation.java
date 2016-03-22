@@ -97,7 +97,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
             case R.id.menu_gotolocation:
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(-34, 151))
+                        .target(new LatLng(46.28872, 7.475480000000061))
                         .zoom(17)
                         .bearing(90)
                         .tilt(30)
@@ -107,9 +107,9 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
             case R.id.menu_addmarker:
                 mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(-34, 151))
-                        .title("Marker in Sydney")
-                        .snippet("Sydney")
+                        .position(new LatLng(46.28872, 7.475480000000061))
+                        .title("Marker in Chermignon")
+                        .snippet("Chermignon d'en-haut")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
                 return true;
 
@@ -155,11 +155,17 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        // Add a marker in Sierre and move the camera
+        LatLng hesSierre = new LatLng(46.2930614, 7.536943899999983);
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(hesSierre)
+                .zoom(4)
+                .build();
+        mMap.addMarker(new MarkerOptions().position(hesSierre).title("HES-SO Sierre"));
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }
