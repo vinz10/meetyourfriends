@@ -1,6 +1,7 @@
 package com.example.vincent.meetyourfriends;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -52,20 +55,58 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-
-                //add the infos about the apartment to the intent -> so we can show the last intruduced apartment
-
                 Intent intent = new Intent(this, CreateEvent.class);
 
                 Localisation.this.startActivity(intent);
                 return true;
+
+            case R.id.menu_sethybrid:
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                return true;
+
+            case R.id.menu_showtraffic:
+                mMap.setTrafficEnabled(true);
+                return true;
+
+            case R.id.menu_zoomin:
+                mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                return true;
+
+            case R.id.menu_zoomout:
+                mMap.animateCamera(CameraUpdateFactory.zoomOut());
+                return true;
+
+            case R.id.menu_gotolocation:
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(-34, 151))
+                        .zoom(17)
+                        .bearing(90)
+                        .tilt(30)
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                return true;
+
+            case R.id.menu_addmarker:
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(-34, 151))
+                        .title("Marker in Sydney")
+                        .snippet("Sydney")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
+                return true;
+
+            case R.id.menu_getcurrentlocation:
+                //mMap.setMyLocationEnabled(true);
+                return true;
+
+            case R.id.menu_showcurrentlocation:
+                Location myLocation = mMap.getMyLocation();
+
+                LatLng myLatLng = new LatLng(myLocation.getLatitude(),
+                        myLocation.getLongitude());
+
+                CameraPosition myPosition = new CameraPosition.Builder()
+                        .target(myLatLng).zoom(17).bearing(90).tilt(30).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -92,10 +133,6 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
-        mMap.setTrafficEnabled(true);
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);

@@ -13,4 +13,40 @@
         appNs:showAsAction="never"
         android:title="Show Traffic" />
 
+    <item
+        android:id="@+id/menu_zoomin"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Zoom In" />
+
+    <item
+        android:id="@+id/menu_zoomout"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Zoom Out" />
+
+    <item
+        android:id="@+id/menu_gotolocation"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Go to a location" />
+
+    <item
+        android:id="@+id/menu_addmarker"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Add a marker" />
+
+    <item
+        android:id="@+id/menu_getcurrentlocation"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Get Current Location" />
+
+    <item
+        android:id="@+id/menu_showcurrentlocation"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Show Current Location" />
+
 </menu>
