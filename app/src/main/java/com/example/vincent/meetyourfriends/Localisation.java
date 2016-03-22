@@ -70,6 +70,16 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.map, menu);
+        //new MenuInflater(getApplication()).inflate(R.menu.main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -84,6 +94,8 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+        mMap.setTrafficEnabled(true);
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
