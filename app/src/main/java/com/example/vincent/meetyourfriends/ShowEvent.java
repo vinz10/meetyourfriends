@@ -14,12 +14,12 @@ public class ShowEvent extends AppCompatActivity {
         setContentView(R.layout.activity_show_event);
 
         ActionBar actionBar = getSupportActionBar();
-    actionBar.setLogo(R.drawable.ic_action_android);
-    actionBar.setDisplayUseLogoEnabled(true);
-    actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_android);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
-    // Show the Up button in the action bar.
-    setupActionBar();
+        // Show the Up button in the action bar.
+        setupActionBar();
 }
 
     /**
