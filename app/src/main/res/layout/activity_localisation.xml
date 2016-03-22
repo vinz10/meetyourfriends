@@ -18,4 +18,12 @@
         android:layout_height="match_parent"
         tools:context="com.example.vincent.meetyourfriends.Localisation" />
 
+
+
+
+
+
+
+
+
 </RelativeLayout>
