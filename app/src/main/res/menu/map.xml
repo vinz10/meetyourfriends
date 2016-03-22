@@ -8,10 +8,34 @@
         android:title="Hybrid Mode" />
 
     <item
+        android:id="@+id/menu_setnormal"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Normal Mode" />
+
+    <item
+        android:id="@+id/menu_setsatellite"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Satellite Mode" />
+
+    <item
+        android:id="@+id/menu_setterrain"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Terrain Mode" />
+
+    <item
         android:id="@+id/menu_showtraffic"
         android:orderInCategory="100"
         appNs:showAsAction="never"
         android:title="Show Traffic" />
+
+    <item
+        android:id="@+id/menu_trafficoff"
+        android:orderInCategory="100"
+        appNs:showAsAction="never"
+        android:title="Traffic Off" />
 
     <item
         android:id="@+id/menu_zoomin"
@@ -37,7 +61,7 @@
         appNs:showAsAction="never"
         android:title="Add a marker" />
 
-    <item
+    <!--<item
         android:id="@+id/menu_getcurrentlocation"
         android:orderInCategory="100"
         appNs:showAsAction="never"
@@ -47,6 +71,6 @@
         android:id="@+id/menu_showcurrentlocation"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Show Current Location" />
+        android:title="Show Current Location" />-->
 
 </menu>

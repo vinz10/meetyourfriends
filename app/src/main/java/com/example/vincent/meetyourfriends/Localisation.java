@@ -1,9 +1,12 @@
 package com.example.vincent.meetyourfriends;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -64,8 +67,24 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 return true;
 
+            case R.id.menu_setnormal:
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                return true;
+
+            case R.id.menu_setsatellite:
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                return true;
+
+            case R.id.menu_setterrain:
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                return true;
+
             case R.id.menu_showtraffic:
                 mMap.setTrafficEnabled(true);
+                return true;
+
+            case R.id.menu_trafficoff:
+                mMap.setTrafficEnabled(false);
                 return true;
 
             case R.id.menu_zoomin:
@@ -94,8 +113,12 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
                 return true;
 
-            case R.id.menu_getcurrentlocation:
-                //mMap.setMyLocationEnabled(true);
+            /*case R.id.menu_getcurrentlocation:
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    mMap.setMyLocationEnabled(true);
+                }
+
                 return true;
 
             case R.id.menu_showcurrentlocation:
@@ -106,7 +129,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
                 CameraPosition myPosition = new CameraPosition.Builder()
                         .target(myLatLng).zoom(17).bearing(90).tilt(30).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));*/
         }
         return super.onOptionsItemSelected(item);
     }
