@@ -51,7 +51,7 @@
         appNs:showAsAction="ifRoom"
         android:title="Zoom Out" />
 
-    <item
+    <!--<item
         android:id="@+id/menu_gotolocation"
         android:orderInCategory="100"
         appNs:showAsAction="never"
@@ -63,7 +63,7 @@
         appNs:showAsAction="never"
         android:title="Add a marker" />
 
-    <!--<item
+    <item
         android:id="@+id/menu_getcurrentlocation"
         android:orderInCategory="100"
         appNs:showAsAction="never"

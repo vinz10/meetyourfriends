@@ -127,8 +127,13 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.addMarker(markerOptions);
 
                 // Locate the first location
-                if(i==0)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                if(i==0) {
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(latLng)
+                            .zoom(17)
+                            .build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
             }
         }
     }
@@ -195,7 +200,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.animateCamera(CameraUpdateFactory.zoomOut());
                 return true;
 
-            case R.id.menu_gotolocation:
+            /*case R.id.menu_gotolocation:
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(46.28872, 7.475480000000061))
                         .zoom(17)
@@ -213,7 +218,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
                 return true;
 
-            /*case R.id.menu_getcurrentlocation:
+            case R.id.menu_getcurrentlocation:
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     mMap.setMyLocationEnabled(true);
