@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,11 +58,13 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapLongClick(LatLng point) {
 
-        mMap.addMarker(new MarkerOptions()
+       /* mMap.addMarker(new MarkerOptions()
                 .position(point)
                 .title("new marker")
                 .snippet("test")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));*/
+
+        Toast.makeText(getApplicationContext(), "Point : " + point.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -169,6 +172,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setOnMapLongClickListener(this);
         // Add a marker in Sierre and move the camera
         LatLng hesSierre = new LatLng(46.2930614, 7.536943899999983);
         CameraPosition cameraPosition = new CameraPosition.Builder()
