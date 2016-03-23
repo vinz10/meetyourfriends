@@ -39,14 +39,16 @@
 
     <item
         android:id="@+id/menu_zoomin"
+        android:icon="@drawable/ic_action_add"
         android:orderInCategory="100"
-        appNs:showAsAction="never"
+        appNs:showAsAction="ifRoom"
         android:title="Zoom In" />
 
     <item
         android:id="@+id/menu_zoomout"
+        android:icon="@drawable/ic_action_minus"
         android:orderInCategory="100"
-        appNs:showAsAction="never"
+        appNs:showAsAction="ifRoom"
         android:title="Zoom Out" />
 
     <item

@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,7 +23,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Localisation extends AppCompatActivity implements OnMapReadyCallback {
+public class Localisation extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
 
@@ -42,7 +43,6 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
         // Show the Up button in the action bar.
         setupActionBar();
-
     }
 
     /**
@@ -52,6 +52,16 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    @Override
+    public void onMapLongClick(LatLng point) {
+
+        mMap.addMarker(new MarkerOptions()
+                .position(point)
+                .title("new marker")
+                .snippet("test")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
     }
 
     @Override
