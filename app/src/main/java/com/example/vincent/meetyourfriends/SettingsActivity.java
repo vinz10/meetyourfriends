@@ -24,7 +24,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     public static final String KEY_PREP_LANGUAGE = "prefLanguage";
     private AppCompatDelegate mDelegate;
-    private Locale myLocale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,67 +42,30 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getFragmentManager().beginTransaction().replace(android.R.id.content, new Settings()).commit();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "");
 
-        Toast.makeText(getApplicationContext(), langPref, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), langPref, Toast.LENGTH_LONG).show();
 
-        changeLang("fr");
+        //changeLang("fr");
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        Toast.makeText(getApplicationContext(), "fr", Toast.LENGTH_LONG).show();
-
-        if (key.equals(KEY_PREP_LANGUAGE)) {
-
-            Toast.makeText(getApplicationContext(), "fr", Toast.LENGTH_LONG).show();
-            final Preference connectionPref = findPreference(key);
-
-            connectionPref.setSummary(sharedPreferences.getString(key, ""));
-
-            String languageID = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "2");
-
-            String lang = "en";
-
-            switch (languageID) {
-                case "1":
-                    //Locale localeEN = new Locale("en_US");
-                    //setLocale(localeEN);
-                    lang = "en";
-                    Toast.makeText(getApplicationContext(), "en", Toast.LENGTH_LONG).show();
-                    break;
-                case "2":
-                    //Locale localeCH = new Locale("fr_CH");
-                    //setLocale(localeCH);
-                    lang = "fr";
-                    Toast.makeText(getApplicationContext(), "fr", Toast.LENGTH_LONG).show();
-                    break;
-            }
-            changeLang(lang);
-
-        }
+        String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "");
+        changeLang(langPref);
+        finish();
+        startActivity(getIntent());
     }
 
     public void changeLang(String lang)
     {
-
-        if (lang.equalsIgnoreCase(""))
-            return;
-        myLocale = new Locale(lang);
-        saveLocale(lang);
-        Locale.setDefault(myLocale);
-        android.content.res.Configuration config = new android.content.res.Configuration();
-        config.locale = myLocale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
-
-    public void saveLocale(String lang)
-    {
-        String langPref = "Language";
-        SharedPreferences prefs = getSharedPreferences("CommonPrefs", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(langPref, lang);
-        editor.commit();
+        Resources res = this.getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.locale = new Locale(lang.toLowerCase());
+        res.updateConfiguration(conf, dm);
     }
 
     private AppCompatDelegate getDelegate() {
