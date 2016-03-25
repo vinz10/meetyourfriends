@@ -26,6 +26,7 @@
     <string name="genderMan">Homme</string>
     <string name="genderWoman">Femme</string>
     <string name="hybrid">Mode Hybride</string>
+    <string name="language">Langue</string>
     <string name="lastname">Nom</string>
     <string name="location">Lieu</string>
     <string name="login">Connexion</string>
@@ -48,11 +49,14 @@
     <string name="passwordNotSame">Les mots de passe ne correspondent pas!</string>
     <string name="satellite">Mode Satellite</string>
     <string name="search">Rechercher</string>
+    <string name="setLanguage">Choisir langue</string>
+    <string name="settings">Préférences</string>
     <string name="showEvent">Afficher Evénement</string>
     <string name="showTraffic">Afficher Circulation</string>
     <string name="submit">Valider</string>
     <string name="terrain">Mode Terrain</string>
     <string name="trafficOff">Masquer Circulation</string>
+    <string name="userSettings">Préférences Utilisateur</string>
     <string name="year">Année</string>
     <string name="zoomIn">Zoom Avant</string>
     <string name="zoomOut">Zoom Arrière</string>

@@ -5,18 +5,24 @@
         android:id="@+id/action_show"
         android:icon="@drawable/ic_action_add"
         android:title="@string/createEvent"
-        appNs:showAsAction="ifRoom"/>
+        appNs:showAsAction="always"/>
 
     <item
         android:id="@+id/action_user"
         android:icon="@drawable/ic_action_user"
         android:title="@string/modifyUser"
-        appNs:showAsAction="ifRoom"/>
+        appNs:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_settings"
+        android:title="@string/settings"
+        appNs:showAsAction="always"/>
 
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_action_io"
         android:title="@string/logout"
-        appNs:showAsAction="ifRoom"/>
+        appNs:showAsAction="always"/>
 
 </menu>

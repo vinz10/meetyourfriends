@@ -139,6 +139,21 @@ public class Events extends AppCompatActivity {
 
                 Events.this.startActivity(intent);
                 return true;
+            case R.id.action_settings:
+                // This ID represents the Home or Up button. In the case of this
+                // activity, the Up button is shown. Use NavUtils to allow users
+                // to navigate up one level in the application structure. For
+                // more details, see the Navigation pattern on Android Design:
+                //
+                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+                //
+
+                //add the infos about the apartment to the intent -> so we can show the last intruduced apartment
+
+                intent = new Intent(this, SettingsActivity.class);
+
+                Events.this.startActivity(intent);
+                return true;
             case R.id.action_logout:
 
                 // Suppression du fichier cache
