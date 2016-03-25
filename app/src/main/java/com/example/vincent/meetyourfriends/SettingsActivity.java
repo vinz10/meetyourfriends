@@ -43,12 +43,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "");
-
-        //Toast.makeText(getApplicationContext(), langPref, Toast.LENGTH_LONG).show();
-
-        //changeLang("fr");
     }
 
     @Override
@@ -92,6 +86,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class Settings extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.settings);
+        }
     }
 
 }

@@ -199,42 +199,6 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.menu_zoomout:
                 mMap.animateCamera(CameraUpdateFactory.zoomOut());
                 return true;
-
-            /*case R.id.menu_gotolocation:
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(46.28872, 7.475480000000061))
-                        .zoom(17)
-                        .bearing(90)
-                        .tilt(30)
-                        .build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                return true;
-
-            case R.id.menu_addmarker:
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(46.28872, 7.475480000000061))
-                        .title("Marker in Chermignon")
-                        .snippet("Chermignon d'en-haut")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
-                return true;
-
-            case R.id.menu_getcurrentlocation:
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    mMap.setMyLocationEnabled(true);
-                }
-
-                return true;
-
-            case R.id.menu_showcurrentlocation:
-                Location myLocation = mMap.getMyLocation();
-
-                LatLng myLatLng = new LatLng(myLocation.getLatitude(),
-                        myLocation.getLongitude());
-
-                CameraPosition myPosition = new CameraPosition.Builder()
-                        .target(myLatLng).zoom(17).bearing(90).tilt(30).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));*/
         }
         return super.onOptionsItemSelected(item);
     }

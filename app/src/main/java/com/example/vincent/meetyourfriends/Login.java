@@ -2,11 +2,15 @@ package com.example.vincent.meetyourfriends;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -16,18 +20,33 @@ import com.example.vincent.meetyourfriends.db.DbHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Locale;
 
 public class Login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "");
+        changeLang(langPref);
+
+        setContentView(R.layout.activity_login);
+    }
+
+    public void changeLang(String lang)
+    {
+        Resources res = this.getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.locale = new Locale(lang.toLowerCase());
+        res.updateConfiguration(conf, dm);
     }
 
     public void createAccount(View view) {
