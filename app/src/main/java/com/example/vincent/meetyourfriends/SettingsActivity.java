@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.Locale;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {

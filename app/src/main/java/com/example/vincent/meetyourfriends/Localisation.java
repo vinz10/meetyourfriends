@@ -128,10 +128,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Locate the first location
                 if(i==0) {
-                    CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(latLng)
-                            .zoom(17)
-                            .build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(17).build();
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
             }
@@ -231,10 +228,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMapLongClickListener(this);
         // Add a marker in Sierre and move the camera
         LatLng hesSierre = new LatLng(46.2930614, 7.536943899999983);
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(hesSierre)
-                .zoom(4)
-                .build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(hesSierre).zoom(4).build();
         mMap.addMarker(new MarkerOptions().position(hesSierre).title("HES-SO Sierre"));
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
