@@ -4,19 +4,19 @@
     <item
         android:id="@+id/action_show"
         android:icon="@drawable/ic_action_add"
-        android:title="Create Event"
+        android:title="@string/createEvent"
         appNs:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_user"
         android:icon="@drawable/ic_action_user"
-        android:title="Modify User"
+        android:title="@string/modifyUser"
         appNs:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_action_io"
-        android:title="Logout"
+        android:title="@string/logout"
         appNs:showAsAction="ifRoom"/>
 
 </menu>

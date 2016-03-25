@@ -23,6 +23,7 @@
     <string name="location">Location</string>
     <string name="create">Create</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="createAcount">Create account</string>
     <string name="createAcountL">Create Account</string>
     <string name="events">Events</string>
@@ -30,6 +31,7 @@
     <string name="createEvent">Create Event</string>
     <string name="showEvent">Show Event</string>
     <string name="modifyAccount">Modify Account</string>
+    <string name="modifyUser">Modify User</string>
     <string name="modify">Modify</string>
     <string name="comment">Comment</string>
     <string name="modifyEmail">Modify Mail</string>
@@ -45,6 +47,14 @@
     <string name="confirmPasswordlnull">Confirm the new password!</string>
     <string name="passwordNotSame">Passwords are not the same!</string>
     <string name="mailNotSame">Emails are not the same!</string>
+    <string name="hybrid">Hybrid Mode</string>
+    <string name="normal">Normal Mode</string>
+    <string name="satellite">Satellite Mode</string>
+    <string name="terrain">Terrain Mode</string>
+    <string name="showTraffic">Show Traffic</string>
+    <string name="trafficOff">Traffic Off</string>
+    <string name="zoomIn">Zoom In</string>
+    <string name="zoomOut">Zoom Out</string>
 
     <string-array name="days">
         <item>01</item>

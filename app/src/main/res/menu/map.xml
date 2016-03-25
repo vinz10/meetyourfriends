@@ -5,74 +5,50 @@
         android:id="@+id/menu_sethybrid"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Hybrid Mode" />
+        android:title="@string/hybrid" />
 
     <item
         android:id="@+id/menu_setnormal"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Normal Mode" />
+        android:title="@string/normal" />
 
     <item
         android:id="@+id/menu_setsatellite"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Satellite Mode" />
+        android:title="@string/satellite" />
 
     <item
         android:id="@+id/menu_setterrain"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Terrain Mode" />
+        android:title="@string/terrain" />
 
     <item
         android:id="@+id/menu_showtraffic"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Show Traffic" />
+        android:title="@string/showTraffic" />
 
     <item
         android:id="@+id/menu_trafficoff"
         android:orderInCategory="100"
         appNs:showAsAction="never"
-        android:title="Traffic Off" />
+        android:title="@string/trafficOff" />
 
     <item
         android:id="@+id/menu_zoomin"
         android:icon="@drawable/ic_action_add"
         android:orderInCategory="100"
         appNs:showAsAction="ifRoom"
-        android:title="Zoom In" />
+        android:title="@string/zoomIn" />
 
     <item
         android:id="@+id/menu_zoomout"
         android:icon="@drawable/ic_action_minus"
         android:orderInCategory="100"
         appNs:showAsAction="ifRoom"
-        android:title="Zoom Out" />
-
-    <!--<item
-        android:id="@+id/menu_gotolocation"
-        android:orderInCategory="100"
-        appNs:showAsAction="never"
-        android:title="Go to a location" />
-
-    <item
-        android:id="@+id/menu_addmarker"
-        android:orderInCategory="100"
-        appNs:showAsAction="never"
-        android:title="Add a marker" />
-
-    <item
-        android:id="@+id/menu_getcurrentlocation"
-        android:orderInCategory="100"
-        appNs:showAsAction="never"
-        android:title="Get Current Location" />
-
-    <item
-        android:id="@+id/menu_showcurrentlocation"
-        android:orderInCategory="100"
-        appNs:showAsAction="never"
-        android:title="Show Current Location" />-->
+        android:title="@string/zoomOut" />
 
 </menu>

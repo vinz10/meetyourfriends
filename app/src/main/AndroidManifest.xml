@@ -42,7 +42,7 @@
         </activity>
         <activity
             android:name=".CreateAccount"
-            android:label="@string/createAcount"
+            android:label="@string/createAcountL"
             android:parentActivityName=".Login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
