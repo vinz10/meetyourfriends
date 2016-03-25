@@ -111,7 +111,7 @@
         android:layout_marginTop="520sp"
         android:textColor="@color/colorPrimary"
         android:layout_centerHorizontal="true"
-        android:text="Submit"
+        android:text="@string/submit"
         android:onClick="showLogin"/>
 
 </RelativeLayout>

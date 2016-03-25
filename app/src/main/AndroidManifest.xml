@@ -42,7 +42,7 @@
         </activity>
         <activity
             android:name=".CreateAccount"
-            android:label="Create Account"
+            android:label="@string/createAcount"
             android:parentActivityName=".Login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -50,7 +50,7 @@
         </activity>
         <activity
             android:name=".Events"
-            android:label="Events" />
+            android:label="@string/events" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -65,10 +65,10 @@
 
         <activity
             android:name=".Localisation"
-            android:label="@string/title_activity_localisation" />
+            android:label="@string/map" />
         <activity
             android:name=".CreateEvent"
-            android:label="Create Event"
+            android:label="@string/createEvent"
             android:parentActivityName=".Events">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -76,7 +76,7 @@
         </activity>
         <activity
             android:name=".ShowEvent"
-            android:label="Show Event"
+            android:label="@string/showEvent"
             android:parentActivityName=".Events">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -84,7 +84,7 @@
         </activity>
         <activity
             android:name=".ModifyAccount"
-            android:label="Modify Account"
+            android:label="@string/modifyAccount"
             android:parentActivityName=".Events">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -18,11 +18,18 @@
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="submit">Submit</string>
+    <string name="search">Search</string>
     <string name="eventname">Event name</string>
     <string name="location">Location</string>
     <string name="create">Create</string>
     <string name="login">Login</string>
     <string name="createAcount">Create account</string>
+    <string name="createAcountL">Create Account</string>
+    <string name="events">Events</string>
+    <string name="map">Map</string>
+    <string name="createEvent">Create Event</string>
+    <string name="showEvent">Show Event</string>
+    <string name="modifyAccount">Modify Account</string>
     <string name="modify">Modify</string>
     <string name="comment">Comment</string>
     <string name="modifyEmail">Modify Mail</string>
@@ -151,5 +158,5 @@
         <item>2009</item>
         <item>2010</item>
     </string-array>
-    <string name="title_activity_localisation">Map</string>
+
 </resources>
