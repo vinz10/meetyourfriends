@@ -1,13 +1,29 @@
 package com.example.vincent.meetyourfriends;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import com.example.vincent.meetyourfriends.db.CommentairesContract;
+import com.example.vincent.meetyourfriends.db.DbHelper;
+import com.example.vincent.meetyourfriends.db.EventsContract;
+import com.example.vincent.meetyourfriends.db.UsersContract;
+import com.example.vincent.meetyourfriends.db.UsersInEventContract;
+
+import java.util.ArrayList;
 
 public class CreateEvent extends AppCompatActivity {
+
+    private DbHelper mDbHelper;
+    private Spinner spinner;
+    private ArrayAdapter<String> spinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +37,18 @@ public class CreateEvent extends AppCompatActivity {
 
         // Show the Up button in the action bar.
         setupActionBar();
+
+        // Création des tables
+        mDbHelper = new DbHelper(this);
+
+        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        //db.execSQL(EventsContract.EventEntry.SQL_DELETE_EVENTS);
+        //db.execSQL(EventsContract.EventEntry.CREATE_TABLE_EVENTS);
+        //db.execSQL(UsersInEventContract.UsersInEventEntry.SQL_DELETE_USERSINEVENT);
+        //db.execSQL(UsersInEventContract.UsersInEventEntry.CREATE_TABLE_USERSINEVENT);
+
+        // Inserer code à partir d'ici
+        addUserList(mDbHelper);
     }
 
     /**
@@ -57,5 +85,57 @@ public class CreateEvent extends AppCompatActivity {
     public void showLocalisation(View view) {
         Intent intent = new Intent(this, Localisation.class);
         startActivity(intent);
+    }
+
+    private void addUserList(DbHelper mDbHelper) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Ressortir le prénom et le nom de chaque utilisateur
+        String[] projection = {UsersContract.UserEntry.KEY_FIRSTNAME,
+                UsersContract.UserEntry.KEY_LASTNAME};
+
+        // Trier les utilisateurs par leurs noms de famille
+        String sortOrder = UsersContract.UserEntry.KEY_LASTNAME;
+
+        Cursor c = db.query(UsersContract.UserEntry.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder);
+
+        // Pour chaque utilisateur l'ajouter dans le spinner
+        spinner = (Spinner)findViewById(R.id.createListUser);
+        spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
+        while(c.moveToNext()) {
+            String userName = c.getString(1) + " " + c.getString(0);
+            spinnerAdapter.add(userName);
+        }
+
+        spinnerAdapter.notifyDataSetChanged();
+    }
+
+    public void addGuest() {
+        /*
+        1. Création d'une zone pour chaque invité (bouton + label)
+        2. Lors de l'ajout, supprimer du spinner pour éviter les doublons
+        3. Ajouter la zone dans le scrollview
+         */
+
+
+    }
+
+    public void removeGuest() {
+        /*
+        1. Supprimer le guest de la liste
+        2. Rajouter le guest dans le spinner pour pouvoir le remettre
+        3. Remettre le spinner par ordre alphabétique
+         */
+
+
     }
 }
