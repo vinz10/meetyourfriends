@@ -60,6 +60,9 @@
     <string name="year">Année</string>
     <string name="zoomIn">Zoom Avant</string>
     <string name="zoomOut">Zoom Arrière</string>
+    <string name="date">Date</string>
+    <string name="time">Heure</string>
+    <string name="description">Description</string>
 
     <string-array name="days">
         <item>01</item>

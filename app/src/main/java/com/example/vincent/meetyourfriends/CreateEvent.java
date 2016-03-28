@@ -1,5 +1,8 @@
 package com.example.vincent.meetyourfriends;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +12,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.vincent.meetyourfriends.db.CommentairesContract;
 import com.example.vincent.meetyourfriends.db.DbHelper;
@@ -18,6 +23,8 @@ import com.example.vincent.meetyourfriends.db.UsersContract;
 import com.example.vincent.meetyourfriends.db.UsersInEventContract;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CreateEvent extends AppCompatActivity {
 
@@ -119,6 +126,23 @@ public class CreateEvent extends AppCompatActivity {
         spinnerAdapter.notifyDataSetChanged();
     }
 
+    public void chooseDate() {
+        /*
+        1. Open a Dialog
+        2. Choose Date
+        3. Write Date into selectedDate
+         */
+
+    }
+
+    public void chooseTime() {
+        /*
+        1. Open a Dialog
+        2. Choose Time
+        3. Write Date into selectedTime
+         */
+    }
+
     public void addGuest() {
         /*
         1. Création d'une zone pour chaque invité (bouton + label)
@@ -137,5 +161,33 @@ public class CreateEvent extends AppCompatActivity {
          */
 
 
+    }
+
+    public void createEvent() {
+        /*
+        1. Checker si tous les éléments sont rempli
+            - S'il manque un élément, l'identiquer à l'utilisateur
+        2. Créer l'event et retourner l'id
+        3. Créer les UserInEvent avec l'id des users invités et l'id de l'event
+        4. Afficher la liste des events
+         */
+        if (infoChecked()) {
+            ContentValues values = new ContentValues();
+        }
+    }
+
+    private boolean infoChecked() {
+
+        return true;
+    }
+
+    private boolean checkedEventName() {
+
+        return true;
+    }
+
+    private boolean checkedLocation() {
+
+        return true;
     }
 }

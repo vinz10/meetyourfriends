@@ -15,10 +15,16 @@
         android:layout_height="wrap_content"
         android:hint="@string/eventname"/>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="50dp"
+        android:hint="@string/description"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:orientation="horizontal">
 
         <EditText
@@ -31,15 +37,54 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/ic_action_location"
             android:onClick="showLocalisation"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginTop="150dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:onClick="chooseDate"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/selectedDate"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:onClick="chooseTime"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/selectedTime"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="125dp">
+        android:layout_marginTop="225dp">
 
         <Spinner
             android:id="@+id/createListUser"
@@ -58,8 +103,8 @@
     <ScrollView
         android:id="@+id/CreateListGuest"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="200dp">
+        android:layout_height="200dp"
+        android:layout_marginTop="300dp">
 
         <!-- Add List of Guest with Button for delete -->
     </ScrollView>
@@ -70,7 +115,6 @@
         android:layout_marginTop="520dp"
         android:gravity="center">
 
-        <!-- OnClick Methode (create event) -->
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -60,6 +60,9 @@
     <string name="settings">Settings</string>
     <string name="userSettings">User Settings</string>
     <string name="language">Language</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="description">Description</string>
 
     <string-array name="days">
         <item>01</item>
