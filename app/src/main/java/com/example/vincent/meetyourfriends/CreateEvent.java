@@ -2,6 +2,7 @@ package com.example.vincent.meetyourfriends;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,9 +13,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.vincent.meetyourfriends.db.CommentairesContract;
 import com.example.vincent.meetyourfriends.db.DbHelper;
@@ -26,11 +29,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateEvent extends AppCompatActivity {
+public class CreateEvent extends AppCompatActivity implements View.OnClickListener {
 
     private DbHelper mDbHelper;
     private Spinner spinner;
     private ArrayAdapter<String> spinnerAdapter;
+
+    private Button dateButton;
+    private DatePickerDialog selectedDate;
+
+    private Button timeButton;
+    private TimePickerDialog selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,8 @@ public class CreateEvent extends AppCompatActivity {
 
         // Inserer code à partir d'ici
         addUserList(mDbHelper);
+
+        initializeView();
     }
 
     /**
@@ -126,24 +137,53 @@ public class CreateEvent extends AppCompatActivity {
         spinnerAdapter.notifyDataSetChanged();
     }
 
-    public void chooseDate() {
+    private void initializeView() {
+        dateButton = (Button)findViewById(R.id.dateButton);
+        dateButton.setOnClickListener(this);
+
+        timeButton = (Button)findViewById(R.id.timeButton);
+        timeButton.setOnClickListener(this);
+    }
+
+    public void chooseDate(View view) {
         /*
         1. Open a Dialog
         2. Choose Date
         3. Write Date into selectedDate
          */
 
+
+
+        Calendar newCalendar = Calendar.getInstance();
+        selectedDate = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                TextView date = (TextView)findViewById(R.id.selectedDate);
+
+                date.setText(dayOfMonth + "." + monthOfYear + "." + year);
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void chooseTime() {
+    public void chooseTime(View view) {
         /*
         1. Open a Dialog
         2. Choose Time
         3. Write Date into selectedTime
          */
+        Date current = new Date();
+        selectedTime = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
+
+          @Override
+          public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+              TextView time = (TextView)findViewById(R.id.selectedTime);
+
+              time.setText(hourOfDay + "h" + minute);
+          }
+        }, current.getHours(), current.getMinutes(),true);
     }
 
-    public void addGuest() {
+    public void addGuest(View view) {
         /*
         1. Création d'une zone pour chaque invité (bouton + label)
         2. Lors de l'ajout, supprimer du spinner pour éviter les doublons
@@ -163,7 +203,7 @@ public class CreateEvent extends AppCompatActivity {
 
     }
 
-    public void createEvent() {
+    public void createEvent(View view) {
         /*
         1. Checker si tous les éléments sont rempli
             - S'il manque un élément, l'identiquer à l'utilisateur
@@ -189,5 +229,14 @@ public class CreateEvent extends AppCompatActivity {
     private boolean checkedLocation() {
 
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == dateButton) {
+            selectedDate.show();
+        } else if(view == timeButton) {
+            selectedTime.show();
+        }
     }
 }

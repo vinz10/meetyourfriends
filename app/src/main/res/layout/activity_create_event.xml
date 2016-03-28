@@ -56,7 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/date"
-                android:onClick="chooseDate"/>
+                android:onClick="chooseDate"
+                android:id="@+id/dateButton"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time"
-                android:onClick="chooseTime"/>
+                android:onClick="chooseTime"
+                android:id="@+id/timeButton"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
