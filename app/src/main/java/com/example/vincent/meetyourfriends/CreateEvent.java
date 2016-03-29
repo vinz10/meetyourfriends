@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +17,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -25,7 +29,11 @@ import com.example.vincent.meetyourfriends.db.DbHelper;
 import com.example.vincent.meetyourfriends.db.EventsContract;
 import com.example.vincent.meetyourfriends.db.UsersContract;
 import com.example.vincent.meetyourfriends.db.UsersInEventContract;
+import com.google.android.gms.actions.ItemListIntents;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,8 +45,11 @@ public class CreateEvent extends AppCompatActivity {
     private DbHelper mDbHelper;
     private Spinner users;
     private ArrayAdapter<String> spinnerAdapter;
+    private ScrollView listGuest;
 
     private Spinner dayEvent, monthEvent, yearEvent, hourEvent, minuteEvent;
+
+    private String mail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +118,10 @@ public class CreateEvent extends AppCompatActivity {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Ressortir le prénom et le nom de chaque utilisateur
-        String sql = "SELECT " + UsersContract.UserEntry.KEY_EMAIL + ", " +  UsersContract.UserEntry.KEY_FIRSTNAME + ", " + UsersContract.UserEntry.KEY_LASTNAME
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_EMAIL + ", " + UsersContract.UserEntry.KEY_FIRSTNAME + ", " + UsersContract.UserEntry.KEY_LASTNAME
                 + " FROM " + UsersContract.UserEntry.TABLE_NAME
-                + " WHERE " + UsersContract.UserEntry.KEY_EMAIL + " ";
+                + " ORDER BY " + UsersContract.UserEntry.KEY_LASTNAME
+                + ";";
         Cursor c = db.rawQuery(sql, null);
 
         // Pour chaque utilisateur l'ajouter dans le spinner
@@ -119,11 +131,13 @@ public class CreateEvent extends AppCompatActivity {
         users.setAdapter(spinnerAdapter);
 
         while(c.moveToNext()) {
-            String userName = c.getString(1) + " " + c.getString(0);
+            String userName = c.getString(2) + " " + c.getString(1);
             spinnerAdapter.add(userName);
         }
 
         spinnerAdapter.notifyDataSetChanged();
+
+        listGuest = (ScrollView)findViewById(R.id.CreateListGuest);
     }
 
     private void initializeDate() {
@@ -164,17 +178,24 @@ public class CreateEvent extends AppCompatActivity {
         2. Lors de l'ajout, supprimer du spinner pour éviter les doublons
         3. Ajouter la zone dans le scrollview
          */
+        LinearLayout guestContent = new LinearLayout(this);
+        Button removeGuest = new Button(this);
+        TextView guestName = new TextView(this);
 
-    }
+        guestContent.setOrientation(LinearLayout.HORIZONTAL);
+        guestName.setText(users.getSelectedView().toString());
+        removeGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                1. Supprimer le guest de la liste
+                2. Rajouter le guest dans le spinner pour pouvoir le remettre
+                3. Remettre le spinner par ordre alphabétique
+                 */
+               listGuest.removeView(v.getRootView());
 
-    public void removeGuest(View view) {
-        /*
-        1. Supprimer le guest de la liste
-        2. Rajouter le guest dans le spinner pour pouvoir le remettre
-        3. Remettre le spinner par ordre alphabétique
-         */
-
-
+            }
+        });
     }
 
     public void createEvent(View view) {
@@ -201,4 +222,29 @@ public class CreateEvent extends AppCompatActivity {
     private boolean checkedDate() { return true; }
 
     private boolean checkedTime() { return true; }
+
+    private void readCacheFile() {
+        // Lecture du fichier cache
+        String fileName = "cache.txt";
+        String [] temp;
+        int ch;
+
+        StringBuffer fileContent = new StringBuffer("");
+        FileInputStream fis;
+
+        try {
+            fis = openFileInput(fileName);
+            try {
+                while( (ch = fis.read()) != -1)
+                    fileContent.append((char)ch);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        temp = fileContent.toString().split(";");
+
+        mail = temp[0].toString();
+    }
 }
