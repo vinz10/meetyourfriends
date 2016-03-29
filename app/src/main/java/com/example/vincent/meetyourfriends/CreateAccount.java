@@ -14,13 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.vincent.meetyourfriends.db.DbHelper;
 import com.example.vincent.meetyourfriends.db.UsersContract;
 
+import org.w3c.dom.Text;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CreateAccount extends AppCompatActivity {
 
-    private static String sexe;
+    private static String sexe = "null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +108,25 @@ public class CreateAccount extends AppCompatActivity {
         }
     }
 
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
+
     public void showLogin(View view) {
 
         Intent intent = new Intent(this, Login.class);
 
+        TextView caError = (TextView)findViewById(R.id.caError);
         String mail = ((EditText)findViewById(R.id.caMail)).getText().toString();
         String password = ((EditText)findViewById(R.id.caPassword)).getText().toString();
         String firstname = ((EditText)findViewById(R.id.caFirstname)).getText().toString();
@@ -128,9 +149,31 @@ public class CreateAccount extends AppCompatActivity {
 
         //db.execSQL(UsersContract.UserEntry.SQL_DELETE_USERS);
         //db.execSQL(UsersContract.UserEntry.CREATE_TABLE_USERS);
-        db.insert(UsersContract.UserEntry.TABLE_NAME, null, values);
 
-        startActivity(intent);
+        if (mail.equals("")) {
+            caError.setHint(R.string.createMailNull);
+            caError.setVisibility(View.VISIBLE);
+        } else if (!isEmailValid(mail)) {
+            caError.setHint(R.string.MailInvalid);
+            caError.setVisibility(View.VISIBLE);
+        } else if (password.equals("")) {
+            caError.setHint(R.string.createPassNull);
+            caError.setVisibility(View.VISIBLE);
+        } else if (sexe.equals("null")) {
+            caError.setHint(R.string.createGenderNull);
+            caError.setVisibility(View.VISIBLE);
+        } else if (firstname.equals("")) {
+            caError.setHint(R.string.createFirstnameNull);
+            caError.setVisibility(View.VISIBLE);
+        } else if (lastname.equals("")) {
+            caError.setHint(R.string.createLastnameNull);
+            caError.setVisibility(View.VISIBLE);
+        } else {
+            caError.setVisibility(View.INVISIBLE);
+
+            db.insert(UsersContract.UserEntry.TABLE_NAME, null, values);
+
+            startActivity(intent);
+        }
     }
-
 }

@@ -63,6 +63,12 @@
     <string name="date">Date</string>
     <string name="time">Heure</string>
     <string name="description">Description</string>
+    <string name="createMailNull">Insérer un email!</string>
+    <string name="createPassNull">Insérer un mot de passe!</string>
+    <string name="createGenderNull">Choisir un genre!</string>
+    <string name="createFirstnameNull">Insérer un prénom!</string>
+    <string name="createLastnameNull">Insérer un nom!</string>
+    <string name="MailInvalid">Insérer une adresse email valide!</string>
 
     <string-array name="days">
         <item>01</item>

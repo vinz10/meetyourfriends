@@ -27,6 +27,17 @@
         android:textColor="@color/colorPrimary"
         android:hint="@string/password"/>
 
+    <TextView
+        android:id="@+id/caError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColorHint="#f00"
+        android:layout_marginTop="160sp"
+        android:visibility="invisible"
+        android:textColor="@color/colorPrimary"
+        android:hint="@string/createMailNull"/>
+
     <View android:layout_height="4px"
         android:layout_width="match_parent"
         android:layout_marginTop="190sp"

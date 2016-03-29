@@ -20,6 +20,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModifyAccount extends AppCompatActivity {
 
@@ -95,6 +97,20 @@ public class ModifyAccount extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
+
     public void modifyEmail(View view) {
 
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
@@ -106,6 +122,9 @@ public class ModifyAccount extends AppCompatActivity {
 
         if (eNewMail.getText().toString().isEmpty()) {
             errorMail.setHint(R.string.newMailnull);
+            errorMail.setVisibility(View.VISIBLE);
+        } else if (!isEmailValid(eNewMail.getText().toString())) {
+            errorMail.setHint(R.string.MailInvalid);
             errorMail.setVisibility(View.VISIBLE);
         } else if (eConfirmMail.getText().toString().isEmpty()) {
             errorMail.setHint(R.string.confirmMailnull);
