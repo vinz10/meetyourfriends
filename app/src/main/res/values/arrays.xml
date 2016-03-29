@@ -2,8 +2,41 @@
 <resources>
 
     <string-array name="language">
+        <item name="en">@string/english</item>
+        <item name="fr">@string/french</item>
+    </string-array>
+
+    <string-array name="languageCode">
         <item name="en">EN</item>
         <item name="fr">FR</item>
+    </string-array>
+
+    <string-array name="colorName">
+        <item name="0">@string/defaultColor</item>
+        <item name="1">@string/black</item>
+        <item name="2">@string/red</item>
+        <item name="3">@string/orange</item>
+        <item name="4">@string/yellow</item>
+        <item name="5">@string/green</item>
+        <item name="6">@string/lightGreen</item>
+        <item name="7">@string/blue</item>
+        <item name="8">@string/lightBlue</item>
+        <item name="9">@string/purple</item>
+        <item name="10">@string/gray</item>
+    </string-array>
+
+    <string-array name="colorCode">
+        <item name="0">#0A0A2A</item>
+        <item name="1">#111111</item>
+        <item name="2">#900404</item>
+        <item name="3">#FE9A2E</item>
+        <item name="4">#FACC2E</item>
+        <item name="5">#088A08</item>
+        <item name="6">#01DF3A</item>
+        <item name="7">#0404B4</item>
+        <item name="8">#2E9AFE</item>
+        <item name="9">#8A0868</item>
+        <item name="10">#585858</item>
     </string-array>
 
 </resources>

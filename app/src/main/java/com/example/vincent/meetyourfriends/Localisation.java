@@ -1,11 +1,15 @@
 package com.example.vincent.meetyourfriends;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -49,8 +53,12 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 

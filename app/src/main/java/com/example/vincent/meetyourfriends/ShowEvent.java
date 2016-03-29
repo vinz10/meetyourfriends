@@ -1,6 +1,10 @@
 package com.example.vincent.meetyourfriends;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,8 +17,12 @@ public class ShowEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 

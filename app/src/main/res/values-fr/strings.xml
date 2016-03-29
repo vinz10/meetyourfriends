@@ -74,6 +74,23 @@
     <string name="confirmMessage">Voulez-vous vraiment supprimer votre compte?</string>
     <string name="confirmOK">OUI</string>
     <string name="confirmCancel">Annuler</string>
+    <string name="french">Français</string>
+    <string name="english">Anglais</string>
+    <string name="black">Noir</string>
+    <string name="defaultColor">Défaut</string>
+    <string name="red">Rouge</string>
+    <string name="orange">Orange</string>
+    <string name="yellow">Jaune</string>
+    <string name="green">Vert</string>
+    <string name="lightGreen">Vert clair</string>
+    <string name="blue">Bleu</string>
+    <string name="lightBlue">Bleu clair</string>
+    <string name="purple">Violet</string>
+    <string name="gray">Gris</string>
+    <string name="white">Blanc</string>
+    <string name="actionBarColor">Couleur</string>
+    <string name="actionBarSetColor">Définir la couleur de fond d\'écran</string>
+    <string name="actionBarSettings">Préférences Barre d\'actions</string>
 
     <string-array name="days">
         <item>01</item>

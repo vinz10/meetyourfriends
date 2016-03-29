@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.List;
@@ -23,7 +26,8 @@ import java.util.Locale;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final String KEY_PREP_LANGUAGE = "prefLanguage";
+    public static final String KEY_PREF_LANGUAGE = "prefLanguage";
+    public static final String KEY_PREF_COLORAB = "barColor";
     private AppCompatDelegate mDelegate;
 
     @Override
@@ -32,8 +36,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "");
         ActionBar actionBar = getDelegate().getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
@@ -42,14 +50,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new Settings()).commit();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "");
-        changeLang(langPref);
+
+        if (key.equals(KEY_PREF_LANGUAGE)) {
+            String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
+            changeLang(langPref);
+        }
+
         finish();
         startActivity(getIntent());
     }
@@ -98,5 +109,4 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             addPreferencesFromResource(R.xml.settings);
         }
     }
-
 }

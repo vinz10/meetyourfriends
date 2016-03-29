@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -28,13 +30,16 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREP_LANGUAGE, "");
+        String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
         changeLang(langPref);
 
         setContentView(R.layout.activity_login);

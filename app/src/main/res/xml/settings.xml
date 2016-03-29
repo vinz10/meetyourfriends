@@ -7,9 +7,19 @@
             android:key="prefLanguage"
             android:entries="@array/language"
             android:summary="@string/setLanguage"
-            android:entryValues="@array/language"
+            android:entryValues="@array/languageCode"
             android:title="@string/language" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/actionBarSettings" >
+        <ListPreference
+            android:defaultValue="#111111"
+            android:entries="@array/colorName"
+            android:entryValues="@array/colorCode"
+            android:key="barColor"
+            android:summary="@string/actionBarSetColor"
+            android:title="@string/actionBarColor" />
     </PreferenceCategory>
 
 </PreferenceScreen>
