@@ -2,6 +2,7 @@ package com.example.vincent.meetyourfriends;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -25,21 +26,19 @@ import com.example.vincent.meetyourfriends.db.EventsContract;
 import com.example.vincent.meetyourfriends.db.UsersContract;
 import com.example.vincent.meetyourfriends.db.UsersInEventContract;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-public class CreateEvent extends AppCompatActivity implements View.OnClickListener {
+public class CreateEvent extends AppCompatActivity {
 
     private DbHelper mDbHelper;
-    private Spinner spinner;
+    private Spinner users;
     private ArrayAdapter<String> spinnerAdapter;
 
-    private Button dateButton;
-    private DatePickerDialog selectedDate;
-
-    private Button timeButton;
-    private TimePickerDialog selectedTime;
+    private Spinner dayEvent, monthEvent, yearEvent, hourEvent, minuteEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +63,8 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         //db.execSQL(UsersInEventContract.UsersInEventEntry.CREATE_TABLE_USERSINEVENT);
 
         // Inserer code à partir d'ici
-        addUserList(mDbHelper);
-
-        initializeView();
+        addUserList();
+        initializeDate();
     }
 
     /**
@@ -105,29 +103,20 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         startActivity(intent);
     }
 
-    private void addUserList(DbHelper mDbHelper) {
+    private void addUserList() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Ressortir le prénom et le nom de chaque utilisateur
-        String[] projection = {UsersContract.UserEntry.KEY_FIRSTNAME,
-                UsersContract.UserEntry.KEY_LASTNAME};
-
-        // Trier les utilisateurs par leurs noms de famille
-        String sortOrder = UsersContract.UserEntry.KEY_LASTNAME;
-
-        Cursor c = db.query(UsersContract.UserEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder);
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_EMAIL + ", " +  UsersContract.UserEntry.KEY_FIRSTNAME + ", " + UsersContract.UserEntry.KEY_LASTNAME
+                + " FROM " + UsersContract.UserEntry.TABLE_NAME
+                + " WHERE " + UsersContract.UserEntry.KEY_EMAIL + " ";
+        Cursor c = db.rawQuery(sql, null);
 
         // Pour chaque utilisateur l'ajouter dans le spinner
-        spinner = (Spinner)findViewById(R.id.createListUser);
+        users = (Spinner)findViewById(R.id.createListUser);
         spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
+        users.setAdapter(spinnerAdapter);
 
         while(c.moveToNext()) {
             String userName = c.getString(1) + " " + c.getString(0);
@@ -137,50 +126,36 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         spinnerAdapter.notifyDataSetChanged();
     }
 
-    private void initializeView() {
-        dateButton = (Button)findViewById(R.id.dateButton);
-        dateButton.setOnClickListener(this);
+    private void initializeDate() {
+        dayEvent = (Spinner)findViewById(R.id.dayEvent);
+        ArrayAdapter<CharSequence> adapterDays = ArrayAdapter.createFromResource(this,
+                R.array.days, android.R.layout.simple_spinner_item);
+        adapterDays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dayEvent.setAdapter(adapterDays);
 
-        timeButton = (Button)findViewById(R.id.timeButton);
-        timeButton.setOnClickListener(this);
-    }
+        monthEvent = (Spinner)findViewById(R.id.monthEvent);
+        ArrayAdapter<CharSequence> adapterMonth = ArrayAdapter.createFromResource(this,
+                R.array.months, android.R.layout.simple_spinner_item);
+        adapterMonth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthEvent.setAdapter(adapterMonth);
 
-    public void chooseDate(View view) {
-        /*
-        1. Open a Dialog
-        2. Choose Date
-        3. Write Date into selectedDate
-         */
+        yearEvent = (Spinner)findViewById(R.id.yearEvent);
+        ArrayAdapter<CharSequence> adapterYear = ArrayAdapter.createFromResource(this,
+                R.array.yearEvent, android.R.layout.simple_spinner_item);
+        adapterYear.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearEvent.setAdapter(adapterYear);
 
+        hourEvent = (Spinner)findViewById(R.id.hourEvent);
+        ArrayAdapter<CharSequence> adapterHour = ArrayAdapter.createFromResource(this,
+                R.array.hours, android.R.layout.simple_spinner_item);
+        adapterHour.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        hourEvent.setAdapter(adapterHour);
 
-
-        Calendar newCalendar = Calendar.getInstance();
-        selectedDate = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                TextView date = (TextView)findViewById(R.id.selectedDate);
-
-                date.setText(dayOfMonth + "." + monthOfYear + "." + year);
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-    }
-
-    public void chooseTime(View view) {
-        /*
-        1. Open a Dialog
-        2. Choose Time
-        3. Write Date into selectedTime
-         */
-        Date current = new Date();
-        selectedTime = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
-
-          @Override
-          public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-              TextView time = (TextView)findViewById(R.id.selectedTime);
-
-              time.setText(hourOfDay + "h" + minute);
-          }
-        }, current.getHours(), current.getMinutes(),true);
+        minuteEvent = (Spinner)findViewById(R.id.minuteEvent);
+        ArrayAdapter<CharSequence> adapterMinute = ArrayAdapter.createFromResource(this,
+                R.array.minutes, android.R.layout.simple_spinner_item);
+        adapterMinute.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        minuteEvent.setAdapter(adapterMinute);
     }
 
     public void addGuest(View view) {
@@ -190,10 +165,9 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         3. Ajouter la zone dans le scrollview
          */
 
-
     }
 
-    public void removeGuest() {
+    public void removeGuest(View view) {
         /*
         1. Supprimer le guest de la liste
         2. Rajouter le guest dans le spinner pour pouvoir le remettre
@@ -216,27 +190,15 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private boolean infoChecked() {
+    private boolean infoChecked() { return true; }
 
-        return true;
-    }
+    private boolean checkedEventName() { return true; }
 
-    private boolean checkedEventName() {
+    private boolean checkedDescription() { return true; }
 
-        return true;
-    }
+    private boolean checkedLocation() { return true; }
 
-    private boolean checkedLocation() {
+    private boolean checkedDate() { return true; }
 
-        return true;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if(view == dateButton) {
-            selectedDate.show();
-        } else if(view == timeButton) {
-            selectedTime.show();
-        }
-    }
+    private boolean checkedTime() { return true; }
 }
