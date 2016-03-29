@@ -28,6 +28,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     public static final String KEY_PREF_LANGUAGE = "prefLanguage";
     public static final String KEY_PREF_COLORAB = "barColor";
+    public static final String KEY_PREF_LOGOAB = "icon";
     private AppCompatDelegate mDelegate;
 
     @Override
@@ -42,7 +43,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         ActionBar actionBar = getDelegate().getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
-        actionBar.setDisplayUseLogoEnabled(true);
+        boolean logo = sharedPreferences.getBoolean(SettingsActivity.KEY_PREF_LOGOAB, true);
+        actionBar.setDisplayUseLogoEnabled(logo);
         actionBar.setDisplayShowHomeEnabled(true);
 
         // Show the Up button in the action bar.

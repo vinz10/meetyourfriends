@@ -20,6 +20,12 @@
             android:key="barColor"
             android:summary="@string/actionBarSetColor"
             android:title="@string/actionBarColor" />
+
+        <CheckBoxPreference android:title="@string/actionBarLogo"
+            android:defaultValue="true"
+            android:summary="@string/actionBarLogoMessage"
+            android:key="icon" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

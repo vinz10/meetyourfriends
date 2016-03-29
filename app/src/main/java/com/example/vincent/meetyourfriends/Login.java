@@ -36,7 +36,8 @@ public class Login extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
-        actionBar.setDisplayUseLogoEnabled(true);
+        boolean logo = sharedPreferences.getBoolean(SettingsActivity.KEY_PREF_LOGOAB, true);
+        actionBar.setDisplayUseLogoEnabled(logo);
         actionBar.setDisplayShowHomeEnabled(true);
 
         String langPref = sharedPreferences.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");

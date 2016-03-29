@@ -34,7 +34,8 @@ public class Events extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
-        actionBar.setDisplayUseLogoEnabled(true);
+        boolean logo = sharedPreferences.getBoolean(SettingsActivity.KEY_PREF_LOGOAB, true);
+        actionBar.setDisplayUseLogoEnabled(logo);
         actionBar.setDisplayShowHomeEnabled(true);
 
         final ListView listview = (ListView) findViewById(R.id.listview);
