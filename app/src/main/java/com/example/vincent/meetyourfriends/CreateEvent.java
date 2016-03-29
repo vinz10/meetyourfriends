@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -18,15 +19,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.vincent.meetyourfriends.db.CommentairesContract;
 import com.example.vincent.meetyourfriends.db.DbHelper;
@@ -42,6 +46,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 public class CreateEvent extends AppCompatActivity {
@@ -49,11 +55,12 @@ public class CreateEvent extends AppCompatActivity {
     private DbHelper mDbHelper;
     private Spinner users;
     private ArrayAdapter<String> spinnerAdapter;
-    private ScrollView listGuest;
 
     private Spinner dayEvent, monthEvent, yearEvent, hourEvent, minuteEvent;
 
     private String mail;
+
+    private final ArrayList<String> listGuest = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +92,32 @@ public class CreateEvent extends AppCompatActivity {
         // Inserer code à partir d'ici
         addUserList();
         initializeDate();
+    }
+
+    // J'ai ajouté ça
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            String item = getItem(position);
+            return mIdMap.get(item);
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
     }
 
     /**
@@ -126,11 +159,15 @@ public class CreateEvent extends AppCompatActivity {
     private void addUserList() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
+        readCacheFile();
+
         // Ressortir le prénom et le nom de chaque utilisateur
         String sql = "SELECT " + UsersContract.UserEntry.KEY_EMAIL + ", " + UsersContract.UserEntry.KEY_FIRSTNAME + ", " + UsersContract.UserEntry.KEY_LASTNAME
                 + " FROM " + UsersContract.UserEntry.TABLE_NAME
-                + " ORDER BY " + UsersContract.UserEntry.KEY_LASTNAME
+                + " WHERE " + UsersContract.UserEntry.KEY_EMAIL + " != '" + mail
+                + "' ORDER BY " + UsersContract.UserEntry.KEY_LASTNAME
                 + ";";
+
         Cursor c = db.rawQuery(sql, null);
 
         // Pour chaque utilisateur l'ajouter dans le spinner
@@ -146,7 +183,7 @@ public class CreateEvent extends AppCompatActivity {
 
         spinnerAdapter.notifyDataSetChanged();
 
-        listGuest = (ScrollView)findViewById(R.id.CreateListGuest);
+        //listGuest = (ScrollView)findViewById(R.id.CreateListGuest);
     }
 
     private void initializeDate() {
@@ -187,7 +224,11 @@ public class CreateEvent extends AppCompatActivity {
         2. Lors de l'ajout, supprimer du spinner pour éviter les doublons
         3. Ajouter la zone dans le scrollview
          */
-        LinearLayout guestContent = new LinearLayout(this);
+
+        // Ce que tu avais fait avant......
+
+
+/*        LinearLayout guestContent = new LinearLayout(this);
         Button removeGuest = new Button(this);
         TextView guestName = new TextView(this);
 
@@ -196,15 +237,49 @@ public class CreateEvent extends AppCompatActivity {
         removeGuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                1. Supprimer le guest de la liste
-                2. Rajouter le guest dans le spinner pour pouvoir le remettre
-                3. Remettre le spinner par ordre alphabétique
-                 */
+
+                //1. Supprimer le guest de la liste
+                //2. Rajouter le guest dans le spinner pour pouvoir le remettre
+                //3. Remettre le spinner par ordre alphabétique
+
                listGuest.removeView(v.getRootView());
 
             }
         });
+*/
+
+        // Ce que j'ai fait moi
+        final ListView listview = (ListView) findViewById(R.id.listGuest);
+
+        Spinner cUser = (Spinner) findViewById(R.id.createListUser);
+        String currentUser = cUser.getSelectedItem().toString();
+
+        listGuest.add(currentUser);
+
+        // J'ai ajouté cette méthode un peu plus haut
+        final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                android.R.layout.simple_list_item_1, listGuest);
+
+        listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+
+                final String item = (String) parent.getItemAtPosition(position);
+                view.animate().setDuration(1000).alpha(0).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                listGuest.remove(item);
+                                adapter.notifyDataSetChanged();
+                                view.setAlpha(1);
+                            }
+                        });
+            }
+
+        });
+
     }
 
     public void createEvent(View view) {
