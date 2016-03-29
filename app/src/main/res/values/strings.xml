@@ -35,8 +35,8 @@
     <string name="modifyUser">Modify User</string>
     <string name="modify">Modify</string>
     <string name="comment">Comment</string>
-    <string name="modifyEmail">Modify Mail</string>
-    <string name="modifyPassword">Modify Pass</string>
+    <string name="modifyEmail">Modify Email</string>
+    <string name="modifyPassword">Modify Password</string>
     <string name="deleteAccount">Delete Account</string>
     <string name="erroremailnull">Insert an email address!</string>
     <string name="errorpasswordnull">Insert a password!</string>
@@ -65,10 +65,15 @@
     <string name="description">Description</string>
     <string name="createMailNull">Insert an email address!</string>
     <string name="MailInvalid">Insert a valid email address!</string>
+    <string name="MailExist">Email already exists!</string>
     <string name="createPassNull">Insert a password!</string>
     <string name="createGenderNull">Choose a gender!</string>
     <string name="createFirstnameNull">Insert a firstname!</string>
     <string name="createLastnameNull">Insert a lastname!</string>
+    <string name="confirmeDelete">Delete Account!</string>
+    <string name="confirmMessage">Are you sure you want to delete your account?</string>
+    <string name="confirmOK">YES</string>
+    <string name="confirmCancel">Cancel</string>
 
     <string-array name="days">
         <item>01</item>

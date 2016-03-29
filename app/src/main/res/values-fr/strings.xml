@@ -69,6 +69,11 @@
     <string name="createFirstnameNull">Insérer un prénom!</string>
     <string name="createLastnameNull">Insérer un nom!</string>
     <string name="MailInvalid">Insérer une adresse email valide!</string>
+    <string name="MailExist">Cette adresse email existe déjà!</string>
+    <string name="confirmeDelete">Supprimer Compte!</string>
+    <string name="confirmMessage">Voulez-vous vraiment supprimer votre compte?</string>
+    <string name="confirmOK">OUI</string>
+    <string name="confirmCancel">Annuler</string>
 
     <string-array name="days">
         <item>01</item>

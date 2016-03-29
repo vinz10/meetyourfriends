@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -94,6 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="470dp"
         android:onClick="modifyEmail"
+        android:layout_centerHorizontal="true"
         android:text="@string/modifyEmail"/>
 
     <Button
@@ -102,15 +102,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="520dp"
         android:onClick="modifyPassword"
+        android:layout_centerHorizontal="true"
         android:text="@string/modifyPassword"/>
 
     <Button
         android:id="@+id/maDeleteAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="495dp"
+        android:layout_marginTop="570dp"
         android:text="@string/deleteAccount"
-        android:onClick="deleteAccount"
-        android:layout_alignParentRight="true"/>
+        android:layout_centerHorizontal="true"
+        android:onClick="deleteAccount"/>
 
 </RelativeLayout>

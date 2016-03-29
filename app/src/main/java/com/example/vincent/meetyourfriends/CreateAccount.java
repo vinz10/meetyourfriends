@@ -3,6 +3,7 @@ package com.example.vincent.meetyourfriends;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -122,6 +123,19 @@ public class CreateAccount extends AppCompatActivity {
         return isValid;
     }
 
+    public boolean ExistsEmail(String email) {
+
+        Cursor cursor = null;
+        DbHelper mDbHelper = new DbHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String sql = "SELECT id FROM users WHERE email='" + email + "';";
+        cursor = db.rawQuery(sql, null);
+
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
     public void showLogin(View view) {
 
         Intent intent = new Intent(this, Login.class);
@@ -155,6 +169,9 @@ public class CreateAccount extends AppCompatActivity {
             caError.setVisibility(View.VISIBLE);
         } else if (!isEmailValid(mail)) {
             caError.setHint(R.string.MailInvalid);
+            caError.setVisibility(View.VISIBLE);
+        } else if (ExistsEmail(mail)) {
+            caError.setHint(R.string.MailExist);
             caError.setVisibility(View.VISIBLE);
         } else if (password.equals("")) {
             caError.setHint(R.string.createPassNull);

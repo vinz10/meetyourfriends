@@ -1,7 +1,10 @@
 package com.example.vincent.meetyourfriends;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -111,6 +114,19 @@ public class ModifyAccount extends AppCompatActivity {
         return isValid;
     }
 
+    public boolean ExistsEmail(String email) {
+
+        Cursor cursor = null;
+        DbHelper mDbHelper = new DbHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String sql = "SELECT id FROM users WHERE email='" + email + "';";
+        cursor = db.rawQuery(sql, null);
+
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
     public void modifyEmail(View view) {
 
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
@@ -125,6 +141,9 @@ public class ModifyAccount extends AppCompatActivity {
             errorMail.setVisibility(View.VISIBLE);
         } else if (!isEmailValid(eNewMail.getText().toString())) {
             errorMail.setHint(R.string.MailInvalid);
+            errorMail.setVisibility(View.VISIBLE);
+        } else if (ExistsEmail(eNewMail.getText().toString())) {
+            errorMail.setHint(R.string.MailExist);
             errorMail.setVisibility(View.VISIBLE);
         } else if (eConfirmMail.getText().toString().isEmpty()) {
             errorMail.setHint(R.string.confirmMailnull);
@@ -161,8 +180,8 @@ public class ModifyAccount extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Intent intent = new Intent(this, Events.class);
-            startActivity(intent);
+            finish();
+            startActivity(getIntent());
         } else {
             errorMail.setHint(R.string.mailNotSame);
             errorMail.setVisibility(View.VISIBLE);
@@ -215,8 +234,8 @@ public class ModifyAccount extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Intent intent = new Intent(this, Events.class);
-            startActivity(intent);
+            finish();
+            startActivity(getIntent());
         } else {
             errorPassword.setHint(R.string.passwordNotSame);
             errorPassword.setVisibility(View.VISIBLE);
@@ -224,6 +243,27 @@ public class ModifyAccount extends AppCompatActivity {
     }
 
     public void deleteAccount(View view) {
+
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(R.string.confirmeDelete);
+        alertDialog.setMessage(R.string.confirmMessage);
+        alertDialog.setPositiveButton(R.string.confirmOK, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                deleteAccount();
+            } });
+
+
+        alertDialog.setNegativeButton(R.string.confirmCancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+                startActivity(getIntent());
+            } });
+
+        alertDialog.setIcon(R.drawable.ic_action_warning);
+        alertDialog.show();
+    }
+
+    public void deleteAccount() {
 
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
 
