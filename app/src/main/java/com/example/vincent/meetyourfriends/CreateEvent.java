@@ -277,67 +277,49 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     public void addGuest(View view) {
-        /*
-        1. Création d'une zone pour chaque invité (bouton + label)
-        2. Lors de l'ajout, supprimer du spinner pour éviter les doublons
-        3. Ajouter la zone dans le scrollview
-         */
-
-        // Ce que tu avais fait avant......
-
-
-/*        LinearLayout guestContent = new LinearLayout(this);
-        Button removeGuest = new Button(this);
-        TextView guestName = new TextView(this);
-
-        guestContent.setOrientation(LinearLayout.HORIZONTAL);
-        guestName.setText(users.getSelectedView().toString());
-        removeGuest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //1. Supprimer le guest de la liste
-                //2. Rajouter le guest dans le spinner pour pouvoir le remettre
-                //3. Remettre le spinner par ordre alphabétique
-
-               listGuest.removeView(v.getRootView());
-
-            }
-        });
-*/
-
-        // Ce q ue j'ai fait moi
-        final ListView listview = (ListView) findViewById(R.id.listGuest);
-
         Spinner cUser = (Spinner) findViewById(R.id.createListUser);
         String currentUser = cUser.getSelectedItem().toString();
 
-        listGuest.add(currentUser);
+        if(guestExist(currentUser)) {
+            // Ce q ue j'ai fait moi
+            final ListView listview = (ListView) findViewById(R.id.listGuest);
 
-        // J'ai ajouté cette méthode un peu plus haut
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, listGuest);
+            listGuest.add(currentUser);
 
-        listview.setAdapter(adapter);
+            // J'ai ajouté cette méthode un peu plus haut
+            final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                    android.R.layout.simple_list_item_1, listGuest);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listview.setAdapter(adapter);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(1000).alpha(0).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        listGuest.remove(item);
-                        adapter.notifyDataSetChanged();
-                        view.setAlpha(1);
-                    }
-                });
-            }
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 
-        });
+                    final String item = (String) parent.getItemAtPosition(position);
+                    view.animate().setDuration(1000).alpha(0).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            listGuest.remove(item);
+                            adapter.notifyDataSetChanged();
+                            view.setAlpha(1);
+                        }
+                    });
+                }
 
+            });
+        }
+
+    }
+
+    private boolean guestExist(String user) {
+        // Si le user est déjà invité retourne faux, sinon vrai
+        for(String guest : listGuest) {
+            if(guest.equals(user))
+                return false;
+        }
+        return true;
     }
 
     public void createEvent(View view) {
@@ -373,7 +355,7 @@ public class CreateEvent extends AppCompatActivity {
                 + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
         String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString() + "."
                 + ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
-        int idCreator = getIdUser();
+        int idCreator = getIdUserByMail();
 
         // Insertion dans la base de donnée
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -467,7 +449,7 @@ public class CreateEvent extends AppCompatActivity {
         mail = temp[0].toString();
     }
 
-    private int getIdUser() {
+    private int getIdUserByMail() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
                 + " FROM " + UsersContract.UserEntry.TABLE_NAME
