@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,6 +45,9 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
         // Show the Up button in the action bar.
         setupActionBar();
+
+        loadEvent();
+
 }
 
     /**
@@ -88,5 +92,13 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(hesSierre).zoom(10).build();
         mMap.addMarker(new MarkerOptions().position(hesSierre).title("HES-SO Sierre"));
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    private void loadEvent() {
+        TextView eventName = (TextView)findViewById(R.id.eventNameShow);
+
+        Intent intent = getIntent();
+
+        eventName.setText(intent.getStringExtra("eventName"));
     }
 }

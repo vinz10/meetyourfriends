@@ -3,6 +3,8 @@ package com.example.vincent.meetyourfriends;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
@@ -17,11 +19,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.vincent.meetyourfriends.db.DbHelper;
+import com.example.vincent.meetyourfriends.db.EventsContract;
+import com.example.vincent.meetyourfriends.db.UsersContract;
+import com.example.vincent.meetyourfriends.db.UsersInEventContract;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Events extends AppCompatActivity {
+
+    private DbHelper mDbHelper;
+
+    private String mail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +52,14 @@ public class Events extends AppCompatActivity {
         actionBar.setDisplayUseLogoEnabled(logo);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        final ListView listview = (ListView) findViewById(R.id.listview);
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
+        mDbHelper = new DbHelper(this);
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
+        final ListView listview = (ListView) findViewById(R.id.listview);
+
+        final ArrayList<String> guestList = getEventList();
+
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
+                android.R.layout.simple_list_item_1, guestList);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,6 +81,10 @@ public class Events extends AppCompatActivity {
 
                 Intent intent = new Intent(view.getContext(), ShowEvent.class);
                 //Intent intent = getIntent();
+                // Mettre le nom de l'event dans l'intent
+                String eventName = parent.getItemAtPosition(position).toString();
+                intent.putExtra("eventName", eventName);
+
                 startActivity(intent);
             }
 
@@ -113,6 +126,31 @@ public class Events extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
 
+    }
+
+    private void readCacheFile() {
+        // Lecture du fichier cache
+        String fileName = "cache.txt";
+        String [] temp;
+        int ch;
+
+        StringBuffer fileContent = new StringBuffer("");
+        FileInputStream fis;
+
+        try {
+            fis = openFileInput(fileName);
+            try {
+                while( (ch = fis.read()) != -1)
+                    fileContent.append((char)ch);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        temp = fileContent.toString().split(";");
+
+        mail = temp[0].toString();
     }
 
     @Override
@@ -174,5 +212,46 @@ public class Events extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<String> getEventList() {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        int idUser = getUserIdByMail();
+
+        String sql = "SELECT " + EventsContract.EventEntry.KEY_NAME
+                + " FROM " + EventsContract.EventEntry.TABLE_NAME + " E, " + UsersInEventContract.UsersInEventEntry.TABLE_NAME + " UE"
+                + " WHERE E." + EventsContract.EventEntry.KEY_ID + " = UE." + UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT
+                + " AND (E." + EventsContract.EventEntry.KEY_ID_USER + " = " + idUser
+                + " OR UE." + UsersInEventContract.UsersInEventEntry.KEY_ID_USER + " = " + idUser + ")"
+                + " ORDER BY " + EventsContract.EventEntry.KEY_NAME
+                + ";";
+
+        Cursor c = db.rawQuery(sql, null);
+
+        ArrayList<String> eventList = new ArrayList<String>();
+
+        while(c.moveToNext()) {
+            eventList.add(c.getString(0));
+        }
+
+        return eventList;
+    }
+
+    private int getUserIdByMail() {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        readCacheFile();
+
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
+                + " FROM " + UsersContract.UserEntry.TABLE_NAME
+                + " WHERE " + UsersContract.UserEntry.KEY_EMAIL + " = '" + mail
+                + "';";
+
+        Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
+        int idUser = c.getInt(0);
+
+        return idUser;
     }
 }
