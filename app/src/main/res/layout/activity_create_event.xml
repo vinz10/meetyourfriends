@@ -16,6 +16,7 @@
         android:hint="@string/eventname"/>
 
     <EditText
+        android:id="@+id/createEventDescription"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="50dp"
@@ -111,13 +112,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="520dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create"
             android:onClick="createEvent"/>
+        <TextView
+            android:id="@+id/createEventError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/completeFormular"
+            android:textColor="#f0"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 </RelativeLayout>

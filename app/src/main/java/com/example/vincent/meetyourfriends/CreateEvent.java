@@ -39,6 +39,8 @@ import com.example.vincent.meetyourfriends.db.UsersContract;
 import com.example.vincent.meetyourfriends.db.UsersInEventContract;
 import com.google.android.gms.actions.ItemListIntents;
 
+import org.w3c.dom.Text;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -269,13 +271,13 @@ public class CreateEvent extends AppCompatActivity {
 
                 final String item = (String) parent.getItemAtPosition(position);
                 view.animate().setDuration(1000).alpha(0).withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                listGuest.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
+                    @Override
+                    public void run() {
+                        listGuest.remove(item);
+                        adapter.notifyDataSetChanged();
+                        view.setAlpha(1);
+                    }
+                });
             }
 
         });
@@ -291,21 +293,86 @@ public class CreateEvent extends AppCompatActivity {
         4. Afficher la liste des events
          */
         if (infoChecked()) {
-            ContentValues values = new ContentValues();
+            Intent intent = new Intent(this, ShowEvent.class);
+
+            long idEvent = createEvent();
+            createGuest(idEvent);
+
+            startActivity(intent);
+
+        } else {
+            TextView errorMessage = (TextView)findViewById(R.id.createEventError);
+            errorMessage.setVisibility(View.VISIBLE);
         }
     }
 
-    private boolean infoChecked() { return true; }
+    private long createEvent() {
+        // Création des variables à enregistrer dans la base de donnée
+        String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
+        String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
+        // String eventLongitude
+        // String eventLatitude
+        String date = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString() + "."
+                + ((Spinner)findViewById(R.id.monthEvent)).getSelectedItem().toString() + "."
+                + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
+        String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString() + "."
+                + ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
+        int idCreator = getIdUser();
 
-    private boolean checkedEventName() { return true; }
+        // Insertion dans la base de donnée
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-    private boolean checkedDescription() { return true; }
+        ContentValues values = new ContentValues();
+        values.put(EventsContract.EventEntry.KEY_NAME, eventName);
+        values.put(EventsContract.EventEntry.KEY_DESCRIPTION, eventDescription);
+        //values.put(EventsContract.EventEntry.KEY_LONGITUDE, eventLongitude);
+        //values.put(EventsContract.EventEntry.KEY_LATITUDE, eventLatitude);
+        values.put(EventsContract.EventEntry.KEY_DATE, date);
+        values.put(EventsContract.EventEntry.KEY_TIME, hour);
+        values.put(EventsContract.EventEntry.KEY_ID_USER, idCreator);
 
-    private boolean checkedLocation() { return true; }
+        long idEvent = db.insert(EventsContract.EventEntry.TABLE_NAME, null, values);
 
-    private boolean checkedDate() { return true; }
+        return idEvent;
+    }
 
-    private boolean checkedTime() { return true; }
+    private void createGuest(long idEvent) {
+        for(String user : listGuest) {
+            
+        }
+    }
+
+    private boolean infoChecked() {
+        if(checkedEventName() && checkedDescription() && checkedLocation())
+            return true;
+        else
+            return false;
+    }
+
+    private boolean checkedEventName() {
+        String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
+        if(eventName.equals(""))
+            return false;
+        else
+            return true;
+    }
+
+    private boolean checkedDescription() {
+        String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
+        if(eventDescription.equals(""))
+            return false;
+        else
+            return true;
+
+    }
+
+    private boolean checkedLocation() {
+        String eventLocation = ((EditText)findViewById(R.id.createLocationName)).getText().toString();
+        if(eventLocation.equals(""))
+            return false;
+        else
+            return true;
+    }
 
     private void readCacheFile() {
         // Lecture du fichier cache
@@ -330,5 +397,17 @@ public class CreateEvent extends AppCompatActivity {
         temp = fileContent.toString().split(";");
 
         mail = temp[0].toString();
+    }
+
+    private int getIdUser() {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
+                + " FROM " + UsersContract.UserEntry.TABLE_NAME
+                + " WHERE " + UsersContract.UserEntry.KEY_EMAIL + " = '" + mail
+                + "';";
+
+        Cursor c = db.rawQuery(sql, null);
+
+        return c.getInt(0);
     }
 }
