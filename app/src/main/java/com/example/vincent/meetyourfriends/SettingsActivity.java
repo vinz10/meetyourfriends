@@ -39,7 +39,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "");
+        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "#0A0A2A");
         ActionBar actionBar = getDelegate().getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));

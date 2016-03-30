@@ -102,10 +102,9 @@
         android:id="@+id/listGuest"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorAccent"
         android:layout_marginTop="300dp">
 
-        <!-- Add List of Guest with Button for delete -->
+        <!-- Add List of Guest with Action to delete -->
     </ListView>
 
     <LinearLayout

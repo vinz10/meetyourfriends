@@ -69,7 +69,7 @@ public class CreateEvent extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "");
+        String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "#0A0A2A");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorAB)));
@@ -248,7 +248,7 @@ public class CreateEvent extends AppCompatActivity {
         });
 */
 
-        // Ce que j'ai fait moi
+        // Ce q ue j'ai fait moi
         final ListView listview = (ListView) findViewById(R.id.listGuest);
 
         Spinner cUser = (Spinner) findViewById(R.id.createListUser);
