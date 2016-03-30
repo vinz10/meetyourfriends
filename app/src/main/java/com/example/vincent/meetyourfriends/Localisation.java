@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Localisation extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
@@ -43,6 +44,17 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     MarkerOptions markerOptions;
     LatLng latLng;
+
+    private String eventName;
+    private String eventDescription;
+    private String eventLongitude;
+    private String eventLatitude;
+    private String day;
+    private String month;
+    private String year;
+    private String hour;
+    private String minute;
+    private ArrayList<String> listGuest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,13 +168,38 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapLongClick(LatLng point) {
 
+        Intent intent = getIntent();
+        eventName = intent.getStringExtra("eventName");
+        eventDescription = intent.getStringExtra("eventDescription");
+        eventLongitude = Double.toString(point.longitude);
+        eventLatitude = Double.toString(point.latitude);
+        day = intent.getStringExtra("day");
+        month = intent.getStringExtra("month");
+        year = intent.getStringExtra("year");
+        hour = intent.getStringExtra("hour");
+        minute = intent.getStringExtra("minute");
+        listGuest = intent.getStringArrayListExtra("listGuest");
+
+        Intent intent1 = new Intent(this, CreateEvent.class);
+        intent1.putExtra("eventName", eventName);
+        intent1.putExtra("eventDescription", eventDescription);
+        intent1.putExtra("eventLongitude", eventLongitude);
+        intent1.putExtra("eventLatitude", eventLatitude);
+        intent1.putExtra("day", day);
+        intent1.putExtra("month", month);
+        intent1.putExtra("year", year);
+        intent1.putExtra("hour", hour);
+        intent1.putExtra("minute", minute);
+        intent1.putExtra("listGuest", listGuest);
+        startActivity(intent1);
+
        /* mMap.addMarker(new MarkerOptions()
                 .position(point)
                 .title("new marker")
                 .snippet("test")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));*/
 
-        Toast.makeText(getApplicationContext(), "Point : " + point.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Point : " + eventName, Toast.LENGTH_LONG).show();
     }
 
     @Override

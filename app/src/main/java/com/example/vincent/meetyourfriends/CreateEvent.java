@@ -62,7 +62,8 @@ public class CreateEvent extends AppCompatActivity {
 
     private String mail;
 
-    private final ArrayList<String> listGuest = new ArrayList<String>();
+    private ArrayList<String> listGuest = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class CreateEvent extends AppCompatActivity {
         // Inserer code à partir d'ici
         addUserList();
         initializeDate();
+        loadData();
     }
 
     // J'ai ajouté ça
@@ -154,8 +156,62 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     public void showLocalisation(View view) {
+
+        String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
+        String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
+        String eventLongitude = ((EditText)findViewById(R.id.createLong)).getText().toString();
+        String eventLatitude = ((EditText)findViewById(R.id.createLat)).getText().toString();
+        String day = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString();
+        String month = ((Spinner)findViewById(R.id.monthEvent)).getSelectedItem().toString();
+        String year = ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
+        String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString();
+        String minute = ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
+
         Intent intent = new Intent(this, Localisation.class);
+        intent.putExtra("eventName", eventName);
+        intent.putExtra("eventDescription", eventDescription);
+        intent.putExtra("eventLongitude", eventLongitude);
+        intent.putExtra("eventLatitude", eventLatitude);
+        intent.putExtra("day", day);
+        intent.putExtra("month", month);
+        intent.putExtra("year", year);
+        intent.putExtra("hour", hour);
+        intent.putExtra("minute", minute);
+        intent.putExtra("listGuest", listGuest);
         startActivity(intent);
+    }
+
+    private void loadData() {
+        EditText eventName = (EditText)findViewById(R.id.createEventName);
+        EditText eventDescription = (EditText)findViewById(R.id.createEventDescription);
+        EditText eventLongitude = (EditText)findViewById(R.id.createLong);
+        EditText eventLatitude = (EditText)findViewById(R.id.createLat);
+
+        Intent intent = getIntent();
+
+        eventName.setText(intent.getStringExtra("eventName"));
+        eventDescription.setText(intent.getStringExtra("eventDescription"));
+        eventLongitude.setText(intent.getStringExtra("eventLongitude"));
+        eventLatitude.setText(intent.getStringExtra("eventLatitude"));
+
+        dayEvent.setSelection(((ArrayAdapter) dayEvent.getAdapter()).getPosition(intent.getStringExtra("day")));
+        monthEvent.setSelection(((ArrayAdapter)monthEvent.getAdapter()).getPosition(intent.getStringExtra("month")));
+        yearEvent.setSelection(((ArrayAdapter)yearEvent.getAdapter()).getPosition(intent.getStringExtra("year")));
+        hourEvent.setSelection(((ArrayAdapter)hourEvent.getAdapter()).getPosition(intent.getStringExtra("hour")));
+        minuteEvent.setSelection(((ArrayAdapter)minuteEvent.getAdapter()).getPosition(intent.getStringExtra("minute")));
+
+        listGuest = intent.getStringArrayListExtra("listGuest");
+
+        if (listGuest != null) {
+            final ListView listview = (ListView) findViewById(R.id.listGuest);
+
+            final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                    android.R.layout.simple_list_item_1, listGuest);
+
+            listview.setAdapter(adapter);
+        } else {
+            listGuest = new ArrayList<String>();
+        }
     }
 
     private void addUserList() {
@@ -310,8 +366,8 @@ public class CreateEvent extends AppCompatActivity {
         // Création des variables à enregistrer dans la base de donnée
         String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
         String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
-        // String eventLongitude
-        // String eventLatitude
+        String eventLongitude = ((EditText)findViewById(R.id.createLong)).getText().toString();
+        String eventLatitude = ((EditText)findViewById(R.id.createLat)).getText().toString();
         String date = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString() + "."
                 + ((Spinner)findViewById(R.id.monthEvent)).getSelectedItem().toString() + "."
                 + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
@@ -325,8 +381,8 @@ public class CreateEvent extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(EventsContract.EventEntry.KEY_NAME, eventName);
         values.put(EventsContract.EventEntry.KEY_DESCRIPTION, eventDescription);
-        //values.put(EventsContract.EventEntry.KEY_LONGITUDE, eventLongitude);
-        //values.put(EventsContract.EventEntry.KEY_LATITUDE, eventLatitude);
+        values.put(EventsContract.EventEntry.KEY_LONGITUDE, eventLongitude);
+        values.put(EventsContract.EventEntry.KEY_LATITUDE, eventLatitude);
         values.put(EventsContract.EventEntry.KEY_DATE, date);
         values.put(EventsContract.EventEntry.KEY_TIME, hour);
         values.put(EventsContract.EventEntry.KEY_ID_USER, idCreator);
@@ -367,8 +423,9 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     private boolean checkedLocation() {
-        String eventLocation = ((EditText)findViewById(R.id.createLocationName)).getText().toString();
-        if(eventLocation.equals(""))
+        String eventLong = ((EditText)findViewById(R.id.createLong)).getText().toString();
+        String eventLat = ((EditText)findViewById(R.id.createLat)).getText().toString();
+        if(eventLong.equals("") && eventLat.equals(""))
             return false;
         else
             return true;

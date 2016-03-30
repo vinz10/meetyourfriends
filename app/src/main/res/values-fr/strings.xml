@@ -93,6 +93,8 @@
     <string name="actionBarSettings">Préférences Barre d\'actions</string>
     <string name="actionBarLogo">Logo</string>
     <string name="actionBarLogoMessage">Si cette option est selectionnée, elle permet à la barre d\'actions d\'afficher le logo de l\'application.</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
 
     <string-array name="days">
         <item>01</item>

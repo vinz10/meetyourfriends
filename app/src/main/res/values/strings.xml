@@ -94,6 +94,8 @@
     <string name="actionBarLogo">Logo</string>
     <string name="actionBarLogoMessage">This option if selected will allow the actionbar to display the application icon.</string>
     <string name="completeFormular">Complete all information to create the event !</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
 
     <string-array name="days">
         <item>01</item>

@@ -29,10 +29,16 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/createLocationName"
-            android:layout_width="300dp"
+        android:id="@+id/createLong"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/longitude"/>
+
+        <EditText
+            android:id="@+id/createLat"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:hint="@string/location"/>
+            android:hint="@string/latitude"/>
 
         <!-- OnClick Methode (search location) -->
         <ImageButton
@@ -125,7 +131,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/completeFormular"
-            android:textColor="#f0"
             android:visibility="invisible"/>
     </LinearLayout>
 
