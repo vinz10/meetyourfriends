@@ -195,10 +195,10 @@ public class CreateEvent extends AppCompatActivity {
         eventLatitude.setText(intent.getStringExtra("eventLatitude"));
 
         dayEvent.setSelection(((ArrayAdapter) dayEvent.getAdapter()).getPosition(intent.getStringExtra("day")));
-        monthEvent.setSelection(((ArrayAdapter)monthEvent.getAdapter()).getPosition(intent.getStringExtra("month")));
-        yearEvent.setSelection(((ArrayAdapter)yearEvent.getAdapter()).getPosition(intent.getStringExtra("year")));
-        hourEvent.setSelection(((ArrayAdapter)hourEvent.getAdapter()).getPosition(intent.getStringExtra("hour")));
-        minuteEvent.setSelection(((ArrayAdapter)minuteEvent.getAdapter()).getPosition(intent.getStringExtra("minute")));
+        monthEvent.setSelection(((ArrayAdapter) monthEvent.getAdapter()).getPosition(intent.getStringExtra("month")));
+        yearEvent.setSelection(((ArrayAdapter) yearEvent.getAdapter()).getPosition(intent.getStringExtra("year")));
+        hourEvent.setSelection(((ArrayAdapter) hourEvent.getAdapter()).getPosition(intent.getStringExtra("hour")));
+        minuteEvent.setSelection(((ArrayAdapter) minuteEvent.getAdapter()).getPosition(intent.getStringExtra("minute")));
 
         listGuest = intent.getStringArrayListExtra("listGuest");
 
@@ -393,8 +393,19 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     private void createGuest(long idEvent) {
+        int idUser;
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
         for(String user : listGuest) {
-            
+            String []ar = user.toString().split("[ ]");
+
+            idUser = getIdUserByName(ar[0], ar[1]);
+
+            ContentValues values = new ContentValues();
+            values.put(UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT, idEvent);
+            values.put(UsersInEventContract.UsersInEventEntry.KEY_ID_USER, idUser);
+
+            db.insert(UsersInEventContract.UsersInEventEntry.TABLE_NAME, null, values);
         }
     }
 
@@ -464,7 +475,20 @@ public class CreateEvent extends AppCompatActivity {
                 + "';";
 
         Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
+        return c.getInt(0);
+    }
 
+    private int getIdUserByName(String lastname, String firstname) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
+                + " FROM " + UsersContract.UserEntry.TABLE_NAME
+                + " WHERE " + UsersContract.UserEntry.KEY_LASTNAME + " = '" + lastname
+                + "' AND " + UsersContract.UserEntry.KEY_FIRSTNAME + " = '" + firstname
+                + "';";
+
+        Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
         return c.getInt(0);
     }
 }
