@@ -68,17 +68,6 @@ public class Events extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
 
-                /*final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });*/
-
                 Intent intent = new Intent(view.getContext(), ShowEvent.class);
                 //Intent intent = getIntent();
                 // Mettre le nom de l'event dans l'intent
@@ -219,7 +208,7 @@ public class Events extends AppCompatActivity {
 
         int idUser = getUserIdByMail();
 
-        String sql = "SELECT " + EventsContract.EventEntry.KEY_NAME
+        String sql = "SELECT DISTINCT " + EventsContract.EventEntry.KEY_NAME
                 + " FROM " + EventsContract.EventEntry.TABLE_NAME + " E, " + UsersInEventContract.UsersInEventEntry.TABLE_NAME + " UE"
                 + " WHERE E." + EventsContract.EventEntry.KEY_ID + " = UE." + UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT
                 + " AND (E." + EventsContract.EventEntry.KEY_ID_USER + " = " + idUser
