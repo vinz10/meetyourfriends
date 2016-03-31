@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.vincent.meetyourfriends.db.DbHelper;
+import com.example.vincent.meetyourfriends.db.EventsContract;
+import com.example.vincent.meetyourfriends.db.UsersInEventContract;
 
 import java.io.File;
 import java.io.FileOutputStream;

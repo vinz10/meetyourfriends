@@ -95,6 +95,8 @@
     <string name="actionBarLogoMessage">Si cette option est selectionnée, elle permet à la barre d\'actions d\'afficher le logo de l\'application.</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
+    <string name="completeFormular">Complétez toutes les informations pour créer l\'événement!</string>
+    <string name="eventNameExist">Ce nom d\'événement existe déjà!</string>
 
     <string-array name="days">
         <item>01</item>

@@ -133,6 +133,13 @@
             android:text="@string/completeFormular"
             android:visibility="invisible"
             android:textColor="@color/colorWarning"/>
+        <TextView
+            android:id="@+id/eventNameExist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/eventNameExist"
+            android:visibility="invisible"
+            android:textColor="@color/colorWarning"/>
     </LinearLayout>
 
 </RelativeLayout>

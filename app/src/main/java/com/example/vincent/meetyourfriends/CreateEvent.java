@@ -331,7 +331,11 @@ public class CreateEvent extends AppCompatActivity {
         3. Créer les UserInEvent avec l'id des users invités et l'id de l'event
         4. Afficher la liste des events
          */
+        TextView errorMessage = (TextView)findViewById(R.id.createEventError);
+
         if (infoChecked()) {
+            errorMessage.setVisibility(View.INVISIBLE);
+
             Intent intent = new Intent(this, Events.class);
 
             long idEvent = createEvent();
@@ -340,7 +344,6 @@ public class CreateEvent extends AppCompatActivity {
             startActivity(intent);
 
         } else {
-            TextView errorMessage = (TextView)findViewById(R.id.createEventError);
             errorMessage.setVisibility(View.VISIBLE);
         }
     }
@@ -352,7 +355,7 @@ public class CreateEvent extends AppCompatActivity {
         String eventLongitude = ((EditText)findViewById(R.id.createLong)).getText().toString();
         String eventLatitude = ((EditText)findViewById(R.id.createLat)).getText().toString();
         String date = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString() + "."
-                + ((Spinner)findViewById(R.id.monthEvent)).getSelectedItem().toString() + "."
+                + (((Spinner)findViewById(R.id.monthEvent)).getSelectedItemPosition()+1) + "."
                 + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
         String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString() + "."
                 + ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
@@ -400,11 +403,20 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     private boolean checkedEventName() {
+        TextView errorMessage = (TextView)findViewById(R.id.eventNameExist);
         String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
+
         if(eventName.equals(""))
             return false;
-        else
-            return true;
+        else {
+            if(ExistsEventName(eventName)) {
+                errorMessage.setVisibility(View.VISIBLE);
+                return false;
+            } else {
+                errorMessage.setVisibility(View.INVISIBLE);
+                return true;
+            }
+        }
     }
 
     private boolean checkedDescription() {
@@ -473,5 +485,18 @@ public class CreateEvent extends AppCompatActivity {
         Cursor c = db.rawQuery(sql, null);
         c.moveToFirst();
         return c.getInt(0);
+    }
+
+    private boolean ExistsEventName(String eventName) {
+
+        Cursor cursor = null;
+        DbHelper mDbHelper = new DbHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String sql = "SELECT id FROM events WHERE name ='" + eventName + "';";
+        cursor = db.rawQuery(sql, null);
+
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
     }
 }

@@ -96,6 +96,7 @@
     <string name="completeFormular">Complete all information to create the event !</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
+    <string name="eventNameExist">This event name already exists!</string>
 
     <string-array name="days">
         <item>01</item>
