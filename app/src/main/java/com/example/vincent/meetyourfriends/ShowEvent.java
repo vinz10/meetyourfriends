@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.vincent.meetyourfriends.db.CommentairesContract;
@@ -85,6 +87,23 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         // Appel des fonctions pour charger les données
         loadIntent();
         loadView();
+
+        // Déclaration et affecation des variables
+        ImageButton btModify = ((ImageButton)findViewById(R.id.btModifyEvent));
+        ImageButton btDelete = ((ImageButton)findViewById(R.id.btDeleteEvent));
+
+        // Appel de la fonction pour récupérer l'utilisateur connecté
+        readCacheFile();
+        int idUserConnected = getIdUserByMail();
+
+        // Gestion de l'affichage des boutons modifier et supprimer
+        if (idUserConnected == idCreatorEvent) {
+            btModify.setVisibility(View.VISIBLE);
+            btDelete.setVisibility(View.VISIBLE);
+        } else {
+            btModify.setVisibility(View.INVISIBLE);
+            btDelete.setVisibility(View.INVISIBLE);
+        }
     }
 
     // Méthode pour afficher le bouton retour dans la barre d'actions
@@ -112,10 +131,10 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        // Add a marker in Sierre and move the camera
-        LatLng hesSierre = new LatLng(46.2930614, 7.536943899999983);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(hesSierre).zoom(10).build();
-        mMap.addMarker(new MarkerOptions().position(hesSierre).title("HES-SO Sierre"));
+        // Point sur le lieu de l'événement
+        LatLng eventLocation = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(eventLocation).zoom(10).build();
+        mMap.addMarker(new MarkerOptions().position(eventLocation));
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
@@ -377,5 +396,15 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         public boolean hasStableIds() {
             return true;
         }
+    }
+
+    // Méthode qui permet de modifier l'événement
+    private void modifyEvent() {
+
+    }
+
+    // Méthode qui permet de supprimer l'événement
+    private void deleteEvent() {
+
     }
 }
