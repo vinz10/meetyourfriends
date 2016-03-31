@@ -71,7 +71,9 @@
     <string name="createFirstnameNull">Insert a firstname!</string>
     <string name="createLastnameNull">Insert a lastname!</string>
     <string name="confirmeDelete">Delete Account!</string>
+    <string name="confirmeDeleteComment">Delete Comment!</string>
     <string name="confirmMessage">Are you sure you want to delete your account?</string>
+    <string name="confirmeMessageComment">Are you sure you wante to delete your comment?</string>
     <string name="confirmOK">YES</string>
     <string name="confirmCancel">Cancel</string>
     <string name="french">French</string>

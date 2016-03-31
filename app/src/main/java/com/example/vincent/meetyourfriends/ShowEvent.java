@@ -1,7 +1,9 @@
 package com.example.vincent.meetyourfriends;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -168,8 +171,9 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                     android.R.layout.simple_list_item_1, listComment);
             comments.setAdapter(commentAdaptater);
             commentAdaptater.notifyDataSetChanged();
-            comments.setSelection((listComment.size()-1));
+            comments.setSelection((listComment.size() - 1));
         }
+
     }
 
     private void getEvent() {
@@ -285,6 +289,10 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
             comments.setSelection((listComment.size()-1));
         }
+    }
+
+    private void deleteComment(View view, String item) {
+
     }
 
     private int getIdUserByMail() {
