@@ -1,5 +1,6 @@
 package com.example.vincent.meetyourfriends;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +13,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.vincent.meetyourfriends.db.CommentairesContract;
 import com.example.vincent.meetyourfriends.db.DbHelper;
 import com.example.vincent.meetyourfriends.db.EventsContract;
 import com.example.vincent.meetyourfriends.db.UsersContract;
@@ -28,6 +32,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,13 +50,15 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private int idEvent, idCreatorEvent;
 
-    private TextView textViewEventName;
-    private ListView guest, comments;
-    private ArrayList<String> guestList;
+    private String mail;
 
     private String eventName, description, date, time, longitude, latitude;
     private String[] dateSplit, hourSplit;
     private String day, month, year, hour, minute;
+
+    private ListView comments;
+    private ArrayList<String> listComment;
+    private StableArrayAdapter commentAdaptater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +87,6 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
         loadIntent();
         loadView();
-        getEvent();
-        loadEvent();
-        getGuests();
 }
 
     /**
@@ -132,16 +138,29 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     private void loadView() {
-        textViewEventName = (TextView)findViewById(R.id.eventNameShow);
+        final TextView textViewEventName = (TextView)findViewById(R.id.eventNameShow);
         eventName = intent.getStringExtra("eventName");
-        guest = (ListView)findViewById(R.id.listGuest);
+        textViewEventName.setText(eventName);
+
+        getEvent();
+
+        final ListView guest = (ListView)findViewById(R.id.listGuest);
         comments = (ListView)findViewById(R.id.listComments);
 
-        guestList = new ArrayList<String>();
+        final ArrayList<String> guestList = getGuests();
 
         final StableArrayAdapter guestAdapter = new StableArrayAdapter(this,
                 android.R.layout.simple_list_item_1, guestList);
         guest.setAdapter(guestAdapter);
+        guestAdapter.notifyDataSetChanged();
+
+        listComment = getComments();
+        if(listComment.size() > 0) {
+            commentAdaptater = new StableArrayAdapter(this,
+                    android.R.layout.simple_list_item_1, listComment);
+            comments.setAdapter(commentAdaptater);
+            commentAdaptater.notifyDataSetChanged();
+        }
     }
 
     private void getEvent() {
@@ -170,19 +189,26 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         idCreatorEvent = c.getInt(7);
     }
 
-    private void getGuests() {
+    private ArrayList<String> getGuests() {
+        ArrayList<String> guestList = new ArrayList<String>();
+
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String sql = "SELECT * FROM " + UsersInEventContract.UsersInEventEntry.TABLE_NAME
-                + " WHERE " + UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT + " = " + idEvent;
+        String sql = "SELECT " + UsersInEventContract.UsersInEventEntry.KEY_ID_USER
+                + " FROM " + UsersInEventContract.UsersInEventEntry.TABLE_NAME
+                + " WHERE " + UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT + " = " + idEvent
+                + ";";
 
         Cursor c = db.rawQuery(sql, null);
 
         while(c.moveToNext()) {
-            guestList.add(getGuestById(c.getInt(1)));
+            int idGuest = c.getInt(0);
+            guestList.add(getGuestById(idGuest));
         }
 
         Collections.sort(guestList);
+
+        return guestList;
     }
 
     private String getGuestById(int idGuest) {
@@ -201,8 +227,90 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         return lastName + " " + firstName;
     }
 
-    private void loadEvent() {
-        textViewEventName.setText(eventName);
+    private ArrayList<String> getComments() {
+        ArrayList<String> listComments = new ArrayList<String>();
+
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String sql = "SELECT " + CommentairesContract.CommentairesEntry.KEY_ID_USER + ", " + CommentairesContract.CommentairesEntry.KEY_COMMENTAIRE
+                + " FROM " + CommentairesContract.CommentairesEntry.TABLE_NAME
+                + " WHERE " + CommentairesContract.CommentairesEntry.KEY_ID_EVENT + " = " + idEvent
+                + ";";
+
+        Cursor c = db.rawQuery(sql, null);
+
+        while(c.moveToNext()) {
+            String commentaire = getGuestById(c.getInt(0)) + " : " + c.getString(1);
+            listComments.add(commentaire);
+        }
+
+        return listComments;
+    }
+
+    public void addComment(View view) {
+        // 1. Check si le champ n'est pas vide
+        // 2. Ecrire le commentaire dans la DB
+        // 3. Ajouter dans l'ArrayList commentaire
+        // 4. Notifier le changement
+        String newComment = ((EditText)findViewById(R.id.commentShow)).getText().toString();
+
+        if(newComment != "") {
+            readCacheFile();
+            int idCurrentUser = getIdUserByMail();
+
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(CommentairesContract.CommentairesEntry.KEY_COMMENTAIRE, newComment);
+            values.put(CommentairesContract.CommentairesEntry.KEY_ID_USER, idCurrentUser);
+            values.put(CommentairesContract.CommentairesEntry.KEY_ID_EVENT, idEvent);
+
+            db.insert(CommentairesContract.CommentairesEntry.TABLE_NAME, null, values);
+
+            listComment.add(getGuestById(idCurrentUser) + " : " + newComment);
+
+            commentAdaptater = new StableArrayAdapter(this,
+                    android.R.layout.simple_list_item_1, listComment);
+            comments.setAdapter(commentAdaptater);
+            commentAdaptater.notifyDataSetChanged();
+        }
+    }
+
+    private int getIdUserByMail() {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
+                + " FROM " + UsersContract.UserEntry.TABLE_NAME
+                + " WHERE " + UsersContract.UserEntry.KEY_EMAIL + " = '" + mail
+                + "';";
+
+        Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
+        return c.getInt(0);
+    }
+
+    private void readCacheFile() {
+        // Lecture du fichier cache
+        String fileName = "cache.txt";
+        String [] temp;
+        int ch;
+
+        StringBuffer fileContent = new StringBuffer("");
+        FileInputStream fis;
+
+        try {
+            fis = openFileInput(fileName);
+            try {
+                while( (ch = fis.read()) != -1)
+                    fileContent.append((char)ch);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        temp = fileContent.toString().split(";");
+
+        mail = temp[0].toString();
     }
 
     private class StableArrayAdapter extends ArrayAdapter<String> {
