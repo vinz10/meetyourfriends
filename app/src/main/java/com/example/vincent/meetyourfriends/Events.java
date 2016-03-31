@@ -56,10 +56,10 @@ public class Events extends AppCompatActivity {
 
         final ListView listview = (ListView) findViewById(R.id.listview);
 
-        final ArrayList<String> guestList = getEventList();
+        final ArrayList<String> eventList = getEventList();
 
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, guestList);
+                android.R.layout.simple_list_item_1, eventList);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

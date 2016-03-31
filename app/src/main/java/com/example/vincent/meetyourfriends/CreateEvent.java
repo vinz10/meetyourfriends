@@ -85,6 +85,7 @@ public class CreateEvent extends AppCompatActivity {
 
         // Création des tables
         mDbHelper = new DbHelper(this);
+        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         //SQLiteDatabase db = mDbHelper.getWritableDatabase();
         //db.execSQL(EventsContract.EventEntry.SQL_DELETE_EVENTS);
@@ -331,7 +332,7 @@ public class CreateEvent extends AppCompatActivity {
         4. Afficher la liste des events
          */
         if (infoChecked()) {
-            Intent intent = new Intent(this, ShowEvent.class);
+            Intent intent = new Intent(this, Events.class);
 
             long idEvent = createEvent();
             createGuest(idEvent);
