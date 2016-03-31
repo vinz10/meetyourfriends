@@ -16,11 +16,22 @@
         android:id="@+id/eventNameShow"
         android:textSize="25dp"
         android:textStyle="bold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:id="@+id/showDate"
+        android:text="balbla"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/showDescription"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="120dp"
         android:id="@+id/locationShow">
 
         <!-- Modify Long & Lat with the database -->
@@ -34,19 +45,32 @@
             tools:context="com.example.vincent.meetyourfriends.Localisation" />
     </RelativeLayout>
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="320dp"
+        android:textSize="18dp"
+        android:text="@string/guest"/>
     <ListView
             android:layout_width="150dp"
-            android:layout_height="350dp"
+            android:layout_height="200dp"
             android:id="@+id/listGuest"
-            android:layout_marginTop="250dp">
+            android:layout_marginTop="340dp">
 
             <!-- Show Guest here -->
     </ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="160dp"
+        android:textSize="18dp"
+        android:text="@string/comment"/>
     <ListView
         android:layout_width="250dp"
-        android:layout_height="290dp"
-        android:layout_marginTop="250dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="340dp"
         android:layout_marginLeft="160dp"
         android:id="@+id/listComments">
 

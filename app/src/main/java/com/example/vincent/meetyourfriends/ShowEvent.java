@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.w3c.dom.Text;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -144,6 +146,12 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
         getEvent();
 
+        TextView date = (TextView)findViewById(R.id.showDate);
+        TextView description = (TextView)findViewById(R.id.showDescription);
+
+        date.setText(getString(R.string.the) + " " + day + " " + month + " " + year + " " + getString(R.string.at) + " " + hour + ":" + minute);
+        description.setText(this.description);
+
         final ListView guest = (ListView)findViewById(R.id.listGuest);
         comments = (ListView)findViewById(R.id.listComments);
 
@@ -160,6 +168,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                     android.R.layout.simple_list_item_1, listComment);
             comments.setAdapter(commentAdaptater);
             commentAdaptater.notifyDataSetChanged();
+            comments.setSelection((listComment.size()-1));
         }
     }
 
@@ -273,6 +282,8 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                     android.R.layout.simple_list_item_1, listComment);
             comments.setAdapter(commentAdaptater);
             commentAdaptater.notifyDataSetChanged();
+
+            comments.setSelection((listComment.size()-1));
         }
     }
 
