@@ -1,21 +1,18 @@
 package com.example.vincent.meetyourfriends.db;
 
+// IMPORTATIONS
 import android.provider.BaseColumns;
 
-/**
- * Created by Vincent on 15.03.2016.
- */
+// Classe pour la gestion de la table des 'utilisateurs'
 public final class UsersContract {
 
-    private UsersContract() {
-
-    }
+    // Constructeur
+    private UsersContract() {}
 
     public static abstract class UserEntry implements BaseColumns {
 
         // Nom de la table
         public static final String TABLE_NAME = "users";
-
 
         // Nom des colonnes de la table Users
         public static final String KEY_ID = "id";
@@ -37,6 +34,7 @@ public final class UsersContract {
                 + KEY_SEXE + " TEXT NOT NULL, "
                 + KEY_BIRTHDATE + " TEXT NOT NULL);";
 
+        // Requête pour la suppression de la table
         public static final String SQL_DELETE_USERS =
                 "DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME + ";";
     }

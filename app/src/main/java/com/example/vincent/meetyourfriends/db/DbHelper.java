@@ -1,12 +1,11 @@
 package com.example.vincent.meetyourfriends.db;
 
+// IMPORTATIONS
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Vincent on 15.03.2016.
- */
+// Classe qui fait le lien avec la base de données SQLite
 public class DbHelper extends SQLiteOpenHelper {
 
     // Informations de la base de données

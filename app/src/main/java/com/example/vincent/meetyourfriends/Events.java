@@ -1,5 +1,6 @@
 package com.example.vincent.meetyourfriends;
 
+// IMPORTATIONS
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,18 +13,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.example.vincent.meetyourfriends.db.DbHelper;
 import com.example.vincent.meetyourfriends.db.EventsContract;
 import com.example.vincent.meetyourfriends.db.UsersContract;
 import com.example.vincent.meetyourfriends.db.UsersInEventContract;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,10 +29,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// Classe pour l'affichage des événements
 public class Events extends AppCompatActivity {
 
+    // Déclaration des variables
     private DbHelper mDbHelper;
-
     private String mail;
 
     @Override
@@ -42,8 +41,10 @@ public class Events extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
 
+        // Déclaration et affectation des préférences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        // Gestion de la barre d'actions
         String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "#0A0A2A");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
@@ -52,43 +53,43 @@ public class Events extends AppCompatActivity {
         actionBar.setDisplayUseLogoEnabled(logo);
         actionBar.setDisplayShowHomeEnabled(true);
 
+        // Affectation de mDbHelper
         mDbHelper = new DbHelper(this);
 
+        // Affichage des événements dans une listview
         final ListView listview = (ListView) findViewById(R.id.listview);
-
         final ArrayList<String> eventList = getEventList();
-
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, eventList);
+        final StableArrayAdapter adapter = new StableArrayAdapter(this, android.R.layout.simple_list_item_1, eventList);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+
+                // Sur le clic d'un événement, on l'affiche en détail
 
                 Intent intent = new Intent(view.getContext(), ShowEvent.class);
-                //Intent intent = getIntent();
+
                 // Mettre le nom de l'event dans l'intent
                 String eventName = parent.getItemAtPosition(position).toString();
                 intent.putExtra("eventName", eventName);
 
+                // Affichage de l'événement
                 startActivity(intent);
             }
-
         });
-
-        // Show the Up button in the action bar.
     }
 
+    // Adapteur customisé pour l'affichage des listviews
     private class StableArrayAdapter extends ArrayAdapter<String> {
 
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
+        public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
+
             super(context, textViewResourceId, objects);
+
             for (int i = 0; i < objects.size(); ++i) {
                 mIdMap.put(objects.get(i), i);
             }
@@ -104,28 +105,29 @@ public class Events extends AppCompatActivity {
         public boolean hasStableIds() {
             return true;
         }
-
     }
 
+    // Méthode qui gère la navigation de la barre d'actions
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        // Cette méthode affecte le menu main à la barre d'actions
         getMenuInflater().inflate(R.menu.main, menu);
-        //new MenuInflater(getApplication()).inflate(R.menu.main, menu);
 
         return super.onCreateOptionsMenu(menu);
-
     }
 
+    // Méthode qui lit le fichier cache pour récupérer le mot de passe et le mail de l'utilisateur connecté
     private void readCacheFile() {
-        // Lecture du fichier cache
+
+        // Déclaration et affectation des variables
         String fileName = "cache.txt";
         String [] temp;
         int ch;
-
         StringBuffer fileContent = new StringBuffer("");
         FileInputStream fis;
 
+        // Lecture du fichier cache
         try {
             fis = openFileInput(fileName);
             try {
@@ -139,75 +141,52 @@ public class Events extends AppCompatActivity {
         }
         temp = fileContent.toString().split(";");
 
+        // Affectation du mail de l'utilisateur connecté
         mail = temp[0].toString();
     }
 
+    // Méthode qui gère la navigation de la barre d'actions
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_show:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-
-                //add the infos about the apartment to the intent -> so we can show the last intruduced apartment
-
+                // Action pour créer un événement
                 Intent intent = new Intent(this, CreateEvent.class);
-
                 Events.this.startActivity(intent);
                 return true;
             case R.id.action_user:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-
-                //add the infos about the apartment to the intent -> so we can show the last intruduced apartment
-
+                // Action pour modifier les valeurs de l'utilisateurs
                 intent = new Intent(this, ModifyAccount.class);
-
                 Events.this.startActivity(intent);
                 return true;
             case R.id.action_settings:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-
-                //add the infos about the apartment to the intent -> so we can show the last intruduced apartment
-
+                // Action pour modifier les préférences de l'application
                 intent = new Intent(this, SettingsActivity.class);
-
                 Events.this.startActivity(intent);
                 return true;
             case R.id.action_logout:
+                // Action pour se déconnecter de l'application
 
                 // Suppression du fichier cache
                 this.deleteFile("cache.txt");
 
                 intent = new Intent(this, Login.class);
-
                 Events.this.startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Méthode qui récupère les événements
     private ArrayList<String> getEventList() {
+
+        // Déclaration et affectation de db
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
+        // Récupération de l'utilisateur connecté
         int idUser = getUserIdByMail();
 
+        // Requête pour récupérer les événements en fonction de l'utilisateur connecté
         String sql = "SELECT DISTINCT " + EventsContract.EventEntry.KEY_NAME
                 + " FROM " + EventsContract.EventEntry.TABLE_NAME + " E, " + UsersInEventContract.UsersInEventEntry.TABLE_NAME + " UE"
                 + " WHERE E." + EventsContract.EventEntry.KEY_ID + " = UE." + UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT
@@ -221,15 +200,21 @@ public class Events extends AppCompatActivity {
         ArrayList<String> eventList = new ArrayList<String>();
 
         while(c.moveToNext()) {
+            // Ajout des événements dans la liste
             eventList.add(c.getString(0));
         }
 
+        // Retour de la liste
         return eventList;
     }
 
+    // Méthode qui récupère l'id de l'utilisateur connecté
     private int getUserIdByMail() {
+
+        // Déclaration et affectation de db
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
+        // Appel de la fonction pour récupérer l'utilisateur connecté
         readCacheFile();
 
         String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
@@ -241,6 +226,7 @@ public class Events extends AppCompatActivity {
         c.moveToFirst();
         int idUser = c.getInt(0);
 
+        // Retour de l'id de l'utilisateur connecté
         return idUser;
     }
 }

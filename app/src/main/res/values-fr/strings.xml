@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Fichier des valeurs en Français -->
+
     <string name="app_name">Rencontre tes amis</string>
     <string name="backButton">Retour</string>
     <string name="birthdate">Anniversaire</string>
@@ -97,6 +100,11 @@
     <string name="latitude">Latitude</string>
     <string name="completeFormular">Complétez toutes les informations pour créer l\'événement!</string>
     <string name="eventNameExist">Ce nom d\'événement existe déjà!</string>
+    <string name="the">Le</string>
+    <string name="guest">Invité(s)</string>
+    <string name="confirmeDeleteComment">Supprimer Commentaire!</string>
+    <string name="confirmeMessageComment">Voulez-vous vraiment supprimer ce commentaire?</string>
+    <string name="at">à</string>
 
     <string-array name="days">
         <item>01</item>

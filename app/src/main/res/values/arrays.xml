@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Fichier des tableaux pour la gestion des préférences de l'application -->
+
     <string-array name="language">
         <item name="en">@string/english</item>
         <item name="fr">@string/french</item>

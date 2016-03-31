@@ -1,7 +1,6 @@
 package com.example.vincent.meetyourfriends;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,10 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.example.vincent.meetyourfriends.db.DbHelper;
 import com.example.vincent.meetyourfriends.db.UsersContract;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,6 +27,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Classe pour la modification d'un compte utilisateur
 public class ModifyAccount extends AppCompatActivity {
 
     @Override
@@ -37,8 +35,10 @@ public class ModifyAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_account);
 
+        // Déclaration et affectation des préférences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        // Gestion de la barre d'actions
         String colorAB = sharedPreferences.getString(SettingsActivity.KEY_PREF_COLORAB, "#0A0A2A");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.ic_action_android);
@@ -47,17 +47,17 @@ public class ModifyAccount extends AppCompatActivity {
         actionBar.setDisplayUseLogoEnabled(logo);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        // Show the Up button in the action bar.
+        // Appel de la fonction pour afficher le bouton retour sur la barre d'actions
         setupActionBar();
 
-        // Lecture du fichier cache
+        // Déclaration et affectation des variables
         String fileName = "cache.txt";
         String [] temp;
         int ch;
-
         StringBuffer fileContent = new StringBuffer("");
         FileInputStream fis;
 
+        // Lecture du fichier cache pour récupérer le mail et le mot de passe de l'utilisateur connecté
         try {
             fis = openFileInput(fileName);
             try {
@@ -71,50 +71,44 @@ public class ModifyAccount extends AppCompatActivity {
         }
         temp = fileContent.toString().split(";");
 
+        // Récupération de l'utilisateur connecté avec son mot de passe
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
         EditText eCurrentPassword = ((EditText)findViewById(R.id.maCurrentPassword));
-
         eCurrentMail.setText(temp[0].toString());
         eCurrentPassword.setText(temp[1].toString());
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}.
-     */
+    // Méthode pour afficher le bouton retour dans la barre d'actions
     private void setupActionBar() {
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
+    // Méthode qui gère la navigation de la barre d'actions
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-
-                //add the infos about the apartment to the intent -> so we can show the last intruduced apartment
-
+                // Action retour
                 Intent intent = new Intent(this, Events.class);
-
                 ModifyAccount.this.startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Méthode qui détermine si un email est validé avec un pattern
     public static boolean isEmailValid(String email) {
+
+        // Déclaration et affectation de la variable isValid
         boolean isValid = false;
 
+        // Déclaration du pattern
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+
+        // Conversion du mail
         CharSequence inputStr = email;
 
+        // Check si le mail est valide
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
         if (matcher.matches()) {
@@ -123,28 +117,33 @@ public class ModifyAccount extends AppCompatActivity {
         return isValid;
     }
 
+    // Méthode qui détermine si l'adresse mail existe déjà dans la BD
     public boolean ExistsEmail(String email) {
 
+        // Requête SQL
         Cursor cursor = null;
         DbHelper mDbHelper = new DbHelper(this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         String sql = "SELECT id FROM users WHERE email='" + email + "';";
         cursor = db.rawQuery(sql, null);
 
+        // Retour true or false en fonction de la requête
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
     }
 
+    // Méthode qui permet de modifier l'email
     public void modifyEmail(View view) {
 
+        // Déclaration et affectation des variables
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
         EditText eCurrentPassword = ((EditText)findViewById(R.id.maCurrentPassword));
         EditText eNewMail = ((EditText)findViewById(R.id.maNewMail));
         EditText eConfirmMail = ((EditText)findViewById(R.id.maConfirmMail));
-
         TextView errorMail = ((TextView) findViewById(R.id.maErrorEmail));
 
+        // Exécution de tests pour les nouveaux emails
         if (eNewMail.getText().toString().isEmpty()) {
             errorMail.setHint(R.string.newMailnull);
             errorMail.setVisibility(View.VISIBLE);
@@ -158,9 +157,12 @@ public class ModifyAccount extends AppCompatActivity {
             errorMail.setHint(R.string.confirmMailnull);
             errorMail.setVisibility(View.VISIBLE);
         } else if (eNewMail.getText().toString().equals(eConfirmMail.getText().toString())) {
+            // Test OK
+
+            // On masque le message d'erreur
             errorMail.setVisibility(View.INVISIBLE);
 
-            // Récupération de l'id
+            // Récupération de l'id de l'utilisateur
             int id = 0;
             Cursor cursor = null;
             DbHelper mDbHelper = new DbHelper(this);
@@ -197,14 +199,16 @@ public class ModifyAccount extends AppCompatActivity {
         }
     }
 
+    // Méthode qui permet de modifier le mot de passe
     public void modifyPassword(View view) {
 
+        // Déclaration et affectation des variables
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
         EditText eNewPassword = ((EditText)findViewById(R.id.maNewPassword));
         EditText eConfirmPassword = ((EditText)findViewById(R.id.maConfirmPassword));
-
         TextView errorPassword = ((TextView) findViewById(R.id.maErrorPassword));
 
+        // Exécution des tests pour les nouveaux mot de passe
         if (eNewPassword.getText().toString().isEmpty()) {
             errorPassword.setHint(R.string.newPasswordnull);
             errorPassword.setVisibility(View.VISIBLE);
@@ -212,9 +216,12 @@ public class ModifyAccount extends AppCompatActivity {
             errorPassword.setHint(R.string.confirmPasswordlnull);
             errorPassword.setVisibility(View.VISIBLE);
         } else if (eNewPassword.getText().toString().equals(eConfirmPassword.getText().toString())) {
+            // Test OK
+
+            // On masque le message d'erreur
             errorPassword.setVisibility(View.INVISIBLE);
 
-            // Récupération de l'id
+            // Récupération de l'id de l'utilisateur
             int id = 0;
             Cursor cursor = null;
             DbHelper mDbHelper = new DbHelper(this);
@@ -251,19 +258,23 @@ public class ModifyAccount extends AppCompatActivity {
         }
     }
 
+    // Méthode qui permet de supprimer l'utilisateur
     public void deleteAccount(View view) {
 
+        // Message d'alerte avant la suppression
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(R.string.confirmeDelete);
         alertDialog.setMessage(R.string.confirmMessage);
         alertDialog.setPositiveButton(R.string.confirmOK, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                // Appel de la méthode pour supprimer définitivement l'utilisateur
                 deleteAccount();
             } });
 
 
         alertDialog.setNegativeButton(R.string.confirmCancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                // On revient sur la page sans rien faire
                 finish();
                 startActivity(getIntent());
             } });
@@ -272,11 +283,13 @@ public class ModifyAccount extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // Méthode qui supprime définitivement l'utilisateur
     public void deleteAccount() {
 
+        // Déclaration et affectation de eCurrentMail
         EditText eCurrentMail = ((EditText)findViewById(R.id.maCurrentMail));
 
-        // Récupération de l'id
+        // Récupération de l'id de l'utilisateur
         int id = 0;
         Cursor cursor = null;
         DbHelper mDbHelper = new DbHelper(this);
@@ -292,6 +305,7 @@ public class ModifyAccount extends AppCompatActivity {
         // Suppression du fichier cache
         this.deleteFile("cache.txt");
 
+        // Affichage de la page d'accueil
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }

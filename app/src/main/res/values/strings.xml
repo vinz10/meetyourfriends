@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Fichier des valeurs en Anglais (Fichier de base) -->
+
     <string name="app_name">Meet Your Friends</string>
     <string name="backButton">Back</string>
     <string name="mail">Mail</string>

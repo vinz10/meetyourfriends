@@ -1,16 +1,16 @@
 package com.example.vincent.meetyourfriends.db;
 
+// IMPORTATIONS
 import android.provider.BaseColumns;
 
-/**
- * Created by acer-oem on 24.03.2016.
- */
+// Classe pour la gestion de la table des commentaires
 public final class CommentairesContract {
-    private CommentairesContract() {
 
-    }
+    // Constructeur
+    private CommentairesContract() {}
 
     public static abstract class CommentairesEntry implements BaseColumns {
+
         // Nom de la table
         public static final String TABLE_NAME = "commentaires";
 
@@ -20,7 +20,7 @@ public final class CommentairesContract {
         public static final String KEY_ID_USER = "idUser";
         public static final String KEY_ID_EVENT = "idEvent";
 
-        // Nom des Foreign Key
+        // Nom des clés étrangères
         public static final String FK_ID_USER = "fk_idUser";
         public static final String FK_ID_EVENT = "fk_idEvent";
 
@@ -39,6 +39,7 @@ public final class CommentairesContract {
                 + " ON DELETE CASCADE "
                 + ");";
 
+        // Requête de suppression de la table
         public static final String SQL_DELETE_COMMENTAIRES =
                 "DROP TABLE IF EXISTS " + CommentairesEntry.TABLE_NAME + ";";
     }

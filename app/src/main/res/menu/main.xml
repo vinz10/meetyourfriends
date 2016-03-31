@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appNs="http://schemas.android.com/apk/res-auto" >
 
+    <!-- Menu principal -->
+
     <item
         android:id="@+id/action_show"
         android:icon="@drawable/ic_action_add"

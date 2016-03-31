@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appNs="http://schemas.android.com/apk/res-auto" >
 
+    <!-- Menu pour la Google Map -->
+
     <item
         android:id="@+id/menu_sethybrid"
         android:orderInCategory="100"

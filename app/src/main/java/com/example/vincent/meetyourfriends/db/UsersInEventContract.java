@@ -1,16 +1,16 @@
 package com.example.vincent.meetyourfriends.db;
 
+// IMPORTATIONS
 import android.provider.BaseColumns;
 
-/**
- * Created by acer-oem on 24.03.2016.
- */
+// Classe pour la gestion des utilisateurs invités aux événements
 public final class UsersInEventContract {
-    private UsersInEventContract() {
 
-    }
+    // Constructeur
+    private UsersInEventContract() {}
 
     public static abstract class UsersInEventEntry implements BaseColumns {
+
         // Nom de la table
         public static final String TABLE_NAME = "usersInEvent";
 
@@ -19,7 +19,7 @@ public final class UsersInEventContract {
         public static final String KEY_ID_USER = "idUser";
         public static final String KEY_ID_EVENT = "idEvent";
 
-        // Nom des foreign Key
+        // Nom des clés étrangères
         public static final String FK_ID_USER = "fk_idUser";
         public static final String FK_ID_EVENT = "fk_idEvent";
 
@@ -37,6 +37,7 @@ public final class UsersInEventContract {
                 + " ON DELETE CASCADE "
                 + ");";
 
+        // Requête de la suppression de la table
         public static final String SQL_DELETE_USERSINEVENT =
                 "DROP TABLE IF EXISTS " + UsersInEventEntry.TABLE_NAME + ";";
     }
