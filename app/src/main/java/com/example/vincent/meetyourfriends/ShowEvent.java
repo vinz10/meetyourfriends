@@ -403,9 +403,11 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         // Déclaration et affectation de db
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        String comToDelete = commentaire.replace("'", "''");
+
         // Requête SQL
         String sql = "DELETE FROM " + CommentairesContract.CommentairesEntry.TABLE_NAME
-                + " WHERE " + CommentairesContract.CommentairesEntry.KEY_COMMENTAIRE + " = '" + commentaire + "';";
+                + " WHERE " + CommentairesContract.CommentairesEntry.KEY_COMMENTAIRE + " = '" + comToDelete + "';";
 
         // Exécution du delete
         db.execSQL(sql);

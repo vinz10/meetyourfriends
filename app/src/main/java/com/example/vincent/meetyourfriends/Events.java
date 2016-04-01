@@ -188,12 +188,14 @@ public class Events extends AppCompatActivity {
         int idUser = getUserIdByMail();
 
         // Requête pour récupérer les événements en fonction de l'utilisateur connecté
-        String sql = "SELECT DISTINCT E." + EventsContract.EventEntry.KEY_NAME
+        String sql = "SELECT DISTINCT " + EventsContract.EventEntry.KEY_NAME
+                + " FROM " + EventsContract.EventEntry.TABLE_NAME
+                + " WHERE " + EventsContract.EventEntry.KEY_ID_USER + " = " + idUser
+                + " UNION "
+                + "SELECT DISTINCT " + EventsContract.EventEntry.KEY_NAME
                 + " FROM " + EventsContract.EventEntry.TABLE_NAME + " E, " + UsersInEventContract.UsersInEventEntry.TABLE_NAME + " UE"
                 + " WHERE E." + EventsContract.EventEntry.KEY_ID + " = UE." + UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT
                 + " AND UE." + UsersInEventContract.UsersInEventEntry.KEY_ID_USER + " = " + idUser
-                + " OR E." + EventsContract.EventEntry.KEY_ID_USER + " = " + idUser
-                + " ORDER BY E." + EventsContract.EventEntry.KEY_NAME
                 + ";";
 
         Cursor c = db.rawQuery(sql, null);

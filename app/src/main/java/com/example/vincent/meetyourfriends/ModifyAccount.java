@@ -18,8 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.vincent.meetyourfriends.db.CommentairesContract;
 import com.example.vincent.meetyourfriends.db.DbHelper;
+import com.example.vincent.meetyourfriends.db.EventsContract;
 import com.example.vincent.meetyourfriends.db.UsersContract;
+import com.example.vincent.meetyourfriends.db.UsersInEventContract;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -298,6 +303,19 @@ public class ModifyAccount extends AppCompatActivity {
         cursor = db.rawQuery(sql, null);
         cursor.moveToFirst();
         id = cursor.getInt(0);
+
+        // Requête SQL
+        String sql2 = "DELETE FROM " + CommentairesContract.CommentairesEntry.TABLE_NAME
+                + " WHERE " + CommentairesContract.CommentairesEntry.KEY_ID_USER + " = " + id + ";";
+
+        // Suppression de l'évenement
+        db.execSQL(sql2);
+
+        String sql1 = "DELETE FROM " + UsersInEventContract.UsersInEventEntry.TABLE_NAME
+                + " WHERE " + UsersInEventContract.UsersInEventEntry.KEY_ID_USER + " = " + id + ";";
+
+        // Suppression de l'évenement
+        db.execSQL(sql1);
 
         // Activer le delete onCascade
         String activeCascade = "PRAGMA foreign_keys = ON";

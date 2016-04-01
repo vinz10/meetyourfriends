@@ -87,6 +87,7 @@ public class CreateEvent extends AppCompatActivity {
             btCreate.setVisibility(View.VISIBLE);
             btModify.setVisibility(View.INVISIBLE);
             eventNameTemp = "";
+
         } else {
             btCreate.setVisibility(View.INVISIBLE);
             btModify.setVisibility(View.VISIBLE);
@@ -183,6 +184,7 @@ public class CreateEvent extends AppCompatActivity {
         EditText eventDescription = (EditText)findViewById(R.id.createEventDescription);
         EditText eventLongitude = (EditText)findViewById(R.id.createLong);
         EditText eventLatitude = (EditText)findViewById(R.id.createLat);
+        int monthIndex;
 
         Intent intent = getIntent();
 
@@ -192,8 +194,17 @@ public class CreateEvent extends AppCompatActivity {
         eventLongitude.setText(intent.getStringExtra("eventLongitude"));
         eventLatitude.setText(intent.getStringExtra("eventLatitude"));
         dayEvent.setSelection(((ArrayAdapter) dayEvent.getAdapter()).getPosition(intent.getStringExtra("day")));
-        int monthIndex = Integer.parseInt(intent.getStringExtra("month"));
-        monthEvent.setSelection(monthIndex-1);
+        if (intent.getStringExtra("mode").equals("modify")) {
+            if (intent.getStringExtra("month") == null) {
+                monthIndex = 1;
+            } else {
+                monthIndex = Integer.parseInt(intent.getStringExtra("month"));
+            }
+            monthEvent.setSelection(monthIndex-1);
+        } else {
+            monthEvent.setSelection(((ArrayAdapter) monthEvent.getAdapter()).getPosition(intent.getStringExtra("month")));
+        }
+
         yearEvent.setSelection(((ArrayAdapter) yearEvent.getAdapter()).getPosition(intent.getStringExtra("year")));
         hourEvent.setSelection(((ArrayAdapter) hourEvent.getAdapter()).getPosition(intent.getStringExtra("hour")));
         minuteEvent.setSelection(((ArrayAdapter) minuteEvent.getAdapter()).getPosition(intent.getStringExtra("minute")));
