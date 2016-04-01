@@ -192,7 +192,8 @@ public class CreateEvent extends AppCompatActivity {
         eventLongitude.setText(intent.getStringExtra("eventLongitude"));
         eventLatitude.setText(intent.getStringExtra("eventLatitude"));
         dayEvent.setSelection(((ArrayAdapter) dayEvent.getAdapter()).getPosition(intent.getStringExtra("day")));
-        monthEvent.setSelection(((ArrayAdapter) monthEvent.getAdapter()).getPosition(intent.getStringExtra("month")));
+        int monthIndex = Integer.parseInt(intent.getStringExtra("month"));
+        monthEvent.setSelection(monthIndex-1);
         yearEvent.setSelection(((ArrayAdapter) yearEvent.getAdapter()).getPosition(intent.getStringExtra("year")));
         hourEvent.setSelection(((ArrayAdapter) hourEvent.getAdapter()).getPosition(intent.getStringExtra("hour")));
         minuteEvent.setSelection(((ArrayAdapter) minuteEvent.getAdapter()).getPosition(intent.getStringExtra("minute")));

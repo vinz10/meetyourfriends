@@ -37,7 +37,7 @@
     <string name="modifyAccount">Modify Account</string>
     <string name="modifyUser">Modify User</string>
     <string name="modify">Modify</string>
-    <string name="comment">Comment</string>
+    <string name="comment">Comment(s)</string>
     <string name="modifyEmail">Modify Email</string>
     <string name="modifyPassword">Modify Password</string>
     <string name="deleteAccount">Delete Account</string>
@@ -104,7 +104,7 @@
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="eventNameExist">This event name already exists!</string>
-    <string name="guest">Guest</string>
+    <string name="guest">Guest(s)</string>
     <string name="the">The</string>
     <string name="at">at</string>
 

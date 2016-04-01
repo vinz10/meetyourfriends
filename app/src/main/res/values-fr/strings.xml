@@ -6,7 +6,7 @@
     <string name="app_name">Rencontre tes amis</string>
     <string name="backButton">Retour</string>
     <string name="birthdate">Anniversaire</string>
-    <string name="comment">Commentaire</string>
+    <string name="comment">Commentaire(s)</string>
     <string name="confirmMail">Confirmer email</string>
     <string name="confirmMailnull">Confirmer nouvel email!</string>
     <string name="confirmPassword">Confirmer mot de passe</string>
