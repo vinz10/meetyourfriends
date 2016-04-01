@@ -1,8 +1,10 @@
 package com.example.vincent.meetyourfriends;
 
 // IMPORTATIONS
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,7 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-// Classe pour la afficher un événement
+// Classe pour afficher un événement
 public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     // Déclaration des variables
@@ -175,6 +178,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
             comments.setAdapter(commentAdaptater);
             commentAdaptater.notifyDataSetChanged();
             comments.setSelection((listComment.size() - 1));
+            commentOnClick();
         }
     }
 
@@ -284,11 +288,31 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         return listComments;
     }
 
+    // Méthode qui permet de retourner l'idUser du commentaire
+    private int getUserIdComment(String lastname, String firstname) {
+        // Déclaration et affectation de la db
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Requête SQL
+        String sql = "SELECT " + UsersContract.UserEntry.KEY_ID
+                + " FROM " + UsersContract.UserEntry.TABLE_NAME
+                + " WHERE " + UsersContract.UserEntry.KEY_LASTNAME + " = '" + lastname + "'"
+                + " AND " + UsersContract.UserEntry.KEY_FIRSTNAME + " = '" + firstname + "';";
+
+        Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
+
+        int idUser = c.getInt(0);
+
+        return idUser;
+    }
+
     // Méthode qui permet d'ajouter un commentaire
     public void addComment(View view) {
 
         // Déclaration et affectation de newComment
-        String newComment = ((EditText)findViewById(R.id.commentShow)).getText().toString();
+        EditText newCommentEditText = (EditText)findViewById(R.id.commentShow);
+        String newComment = newCommentEditText.getText().toString();
 
         // Check si le champ n'est pas vide
         if(newComment != "") {
@@ -316,13 +340,75 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
             comments.setAdapter(commentAdaptater);
             commentAdaptater.notifyDataSetChanged();
 
+            // Méthode pour créer le onClick des commentaires
+            commentOnClick();
+
+            // Mettre la listView tout en bas (vision du dernier commentaire)
             comments.setSelection((listComment.size()-1));
+
+            // Nettoyer la zone nouveau commentaire
+            newCommentEditText.setText("");
         }
     }
 
-    // Méthode qui permet de supprimer un commentaire
-    private void deleteComment(View view, String item) {
+    private void commentOnClick() {
+        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                String comment = comments.getItemAtPosition(position).toString();
+                String[] splitedComment = comment.split("[:]");
+                String user = splitedComment[0];
+                String[] splitedUser = user.split("[ ]");
+                String lastname = splitedUser[0];
+                String firstname = splitedUser[1];
 
+                final String partComment = splitedComment[1].substring(1, splitedComment[1].length());
+
+                if (getIdUserByMail() == getUserIdComment(lastname, firstname)) {
+                    // Message d'alerte avant la suppression
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
+                    alertDialog.setTitle(R.string.confirmeDeleteComment);
+                    alertDialog.setMessage(R.string.confirmeMessageComment);
+                    alertDialog.setPositiveButton(R.string.confirmOK, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Appel de la méthode pour supprimer définitivement le commentaire
+                            deleteComment(partComment);
+
+                            // Supprimer le commentaire de l'arrayList
+                            listComment.remove(comments.getItemAtPosition(position).toString());
+
+                            // Notifier le changement pour l'affichage
+                            commentAdaptater.notifyDataSetChanged();
+                        }
+                    });
+
+
+                    alertDialog.setNegativeButton(R.string.confirmCancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // On revient sur la page sans rien faire
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    });
+
+                    alertDialog.setIcon(R.drawable.ic_action_warning);
+                    alertDialog.show();
+                }
+            }
+        });
+    }
+
+    // Méthode qui permet de supprimer un commentaire
+    private void deleteComment(String commentaire) {
+        // Déclaration et affectation de db
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Requête SQL
+        String sql = "DELETE FROM " + CommentairesContract.CommentairesEntry.TABLE_NAME
+                + " WHERE " + CommentairesContract.CommentairesEntry.KEY_COMMENTAIRE + " = '" + commentaire + "';";
+
+        // Exécution du delete
+        db.execSQL(sql);
     }
 
     // Méthode qui permet de récupérer l'id de l'utilisateur connecté
@@ -399,12 +485,52 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     // Méthode qui permet de modifier l'événement
-    private void modifyEvent() {
+    public void modifyEvent(View view) {
 
     }
 
     // Méthode qui permet de supprimer l'événement
-    private void deleteEvent() {
+    public void deleteEvent(View view) {
+        // Message d'alerte avant la suppression
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(R.string.confirmeDeleteEvent);
+        alertDialog.setMessage(R.string.confirmMessageEvent);
+        alertDialog.setPositiveButton(R.string.confirmOK, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Appel de la méthode pour supprimer définitivement l'event
+                deleteEvent();
+            } });
 
+
+        alertDialog.setNegativeButton(R.string.confirmCancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // On revient sur la page sans rien faire
+                finish();
+                startActivity(getIntent());
+            } });
+
+        alertDialog.setIcon(R.drawable.ic_action_warning);
+        alertDialog.show();
+    }
+
+    private void deleteEvent() {
+        // Déclaration et affectation de db
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Activation des deletes on Cascade
+        String activeCascade = "PRAGMA foreign_keys = ON";
+
+        db.execSQL(activeCascade);
+
+        // Requête SQL
+        String sql = "DELETE FROM " + EventsContract.EventEntry.TABLE_NAME
+                + " WHERE " + EventsContract.EventEntry.KEY_ID + " = " + idEvent + ";";
+
+        // Suppression de l'évenement
+        db.execSQL(sql);
+
+        // Retourner sur l'affichage de tous les évenements
+        Intent intent = new Intent(this, Events.class);
+        startActivity(intent);
     }
 }

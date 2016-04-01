@@ -299,6 +299,10 @@ public class ModifyAccount extends AppCompatActivity {
         cursor.moveToFirst();
         id = cursor.getInt(0);
 
+        // Activer le delete onCascade
+        String activeCascade = "PRAGMA foreign_keys = ON";
+        db.execSQL(activeCascade);
+
         // Suppression dans la base de données
         db.delete(UsersContract.UserEntry.TABLE_NAME, UsersContract.UserEntry.KEY_ID + "=" + id, null);
 

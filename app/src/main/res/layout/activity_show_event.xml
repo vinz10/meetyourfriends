@@ -22,13 +22,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:id="@+id/showDate"
-        android:text=""/>
+        android:text="Date"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="55dp"
         android:textColor="@color/colorAccent"
-        android:id="@+id/showDescription"/>
+        android:id="@+id/showDescription"
+        android:text="Description"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
