@@ -114,18 +114,31 @@
         <!-- Add List of Guest with Action to delete -->
     </ListView>
 
+    <Button
+        android:id="@+id/createCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="520dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/create"
+        android:onClick="createEvent"/>
+
+    <Button
+        android:id="@+id/createModify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="520dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/modify"
+        android:onClick="modeModify"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="520dp"
+        android:layout_marginTop="565dp"
         android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create"
-            android:onClick="createEvent"/>
         <TextView
             android:id="@+id/createEventError"
             android:layout_width="wrap_content"

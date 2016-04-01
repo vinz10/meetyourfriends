@@ -26,6 +26,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(CommentairesContract.CommentairesEntry.SQL_DELETE_COMMENTAIRES);
+        db.execSQL(UsersInEventContract.UsersInEventEntry.SQL_DELETE_USERSINEVENT);
+        db.execSQL(EventsContract.EventEntry.SQL_DELETE_EVENTS);
+        db.execSQL(UsersContract.UserEntry.SQL_DELETE_USERS);
+
         db.execSQL(UsersContract.UserEntry.CREATE_TABLE_USERS);
         db.execSQL(EventsContract.EventEntry.CREATE_TABLE_EVENTS);
         db.execSQL(UsersInEventContract.UsersInEventEntry.CREATE_TABLE_USERSINEVENT);

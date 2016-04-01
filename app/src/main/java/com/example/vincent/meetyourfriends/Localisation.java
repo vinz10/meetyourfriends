@@ -36,6 +36,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     MarkerOptions markerOptions;
     LatLng latLng;
+    private String eventNameTemp;
     private String eventName;
     private String eventDescription;
     private String eventLongitude;
@@ -45,6 +46,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
     private String year;
     private String hour;
     private String minute;
+    private String mode;
     private ArrayList<String> listGuest;
 
     @Override
@@ -164,6 +166,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
         // Récupération des valeurs dans l'intent
         Intent intent = getIntent();
+        eventNameTemp = intent.getStringExtra("eventNameTemp");
         eventName = intent.getStringExtra("eventName");
         eventDescription = intent.getStringExtra("eventDescription");
         day = intent.getStringExtra("day");
@@ -172,6 +175,7 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
         hour = intent.getStringExtra("hour");
         minute = intent.getStringExtra("minute");
         listGuest = intent.getStringArrayListExtra("listGuest");
+        mode = intent.getStringExtra("mode");
 
         // Affectation de la longitude et de la latitude
         eventLongitude = Double.toString(point.longitude);
@@ -179,6 +183,8 @@ public class Localisation extends AppCompatActivity implements OnMapReadyCallbac
 
         // Insertion des valeurs dans le nouvel intent
         Intent intent1 = new Intent(this, CreateEvent.class);
+        intent1.putExtra("mode", mode);
+        intent1.putExtra("eventNameTemp", eventNameTemp);
         intent1.putExtra("eventName", eventName);
         intent1.putExtra("eventDescription", eventDescription);
         intent1.putExtra("eventLongitude", eventLongitude);

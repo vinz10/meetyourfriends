@@ -152,6 +152,7 @@ public class Events extends AppCompatActivity {
             case R.id.action_show:
                 // Action pour créer un événement
                 Intent intent = new Intent(this, CreateEvent.class);
+                intent.putExtra("mode", "create");
                 Events.this.startActivity(intent);
                 return true;
             case R.id.action_user:

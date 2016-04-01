@@ -105,6 +105,8 @@
     <string name="confirmeDeleteComment">Supprimer Commentaire!</string>
     <string name="confirmeMessageComment">Voulez-vous vraiment supprimer ce commentaire?</string>
     <string name="at">à</string>
+    <string name="confirmMessageEvent">Voulez-vous vraiment supprimer cet événement?</string>
+    <string name="confirmeDeleteEvent">Supprimer Evénement!</string>
 
     <string-array name="days">
         <item>01</item>

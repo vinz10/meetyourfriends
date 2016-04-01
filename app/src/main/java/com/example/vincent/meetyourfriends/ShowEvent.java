@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -351,6 +350,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
+    // Méthode qui s'exécute sur le clic d'un commentaire
     private void commentOnClick() {
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -487,6 +487,27 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     // Méthode qui permet de modifier l'événement
     public void modifyEvent(View view) {
 
+        // Déclaration et affectation des variables
+        String eventName = ((TextView)findViewById(R.id.eventNameShow)).getText().toString();
+        final ArrayList<String> listGuest = getGuests();
+
+        // Stockage des valeurs dans le intent pour passer d'une activité à l'autre sans perdre les données
+        Intent intent = new Intent(this, CreateEvent.class);
+        intent.putExtra("mode", "modify");
+        intent.putExtra("eventNameTemp", eventName);
+        intent.putExtra("eventName", eventName);
+        intent.putExtra("eventDescription", description);
+        intent.putExtra("eventLongitude", longitude);
+        intent.putExtra("eventLatitude", latitude);
+        intent.putExtra("day", day);
+        intent.putExtra("month", month);
+        intent.putExtra("year", year);
+        intent.putExtra("hour", hour);
+        intent.putExtra("minute", minute);
+        intent.putExtra("listGuest", listGuest);
+
+        // Affichage de la localisation
+        startActivity(intent);
     }
 
     // Méthode qui permet de supprimer l'événement
@@ -513,6 +534,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         alertDialog.show();
     }
 
+    // Méthode qui supprime définitivement l'événement dans la base de données
     private void deleteEvent() {
         // Déclaration et affectation de db
         SQLiteDatabase db = mDbHelper.getWritableDatabase();

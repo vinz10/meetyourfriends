@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -40,7 +41,7 @@ public class CreateEvent extends AppCompatActivity {
     private Spinner users;
     private ArrayAdapter<String> spinnerAdapter;
     private Spinner dayEvent, monthEvent, yearEvent, hourEvent, minuteEvent;
-    private String mail;
+    private String mail, eventNameTemp;
     private ArrayList<String> listGuest = new ArrayList<String>();
 
     @Override
@@ -71,6 +72,27 @@ public class CreateEvent extends AppCompatActivity {
         addUserList();
         initializeDate();
         loadData();
+
+        // Déclaration et affecation des variables
+        Button btCreate = ((Button)findViewById(R.id.createCreate));
+        Button btModify = ((Button)findViewById(R.id.createModify));
+
+        // Appel de la fonction pour récupérer l'utilisateur connecté
+        readCacheFile();
+        int idUserConnected = getIdUserByMail();
+
+        // Gestion de l'affichage des boutons création et modification
+        Intent intent = getIntent();
+        if (intent.getStringExtra("mode").equals("create")) {
+            btCreate.setVisibility(View.VISIBLE);
+            btModify.setVisibility(View.INVISIBLE);
+            eventNameTemp = "";
+        } else {
+            btCreate.setVisibility(View.INVISIBLE);
+            btModify.setVisibility(View.VISIBLE);
+            eventNameTemp = intent.getStringExtra("eventNameTemp");
+        }
+
     }
 
     // Adapteur customisé pour l'affichage des utilisateurs invités dans une listview
@@ -132,9 +154,12 @@ public class CreateEvent extends AppCompatActivity {
         String year = ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
         String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString();
         String minute = ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
+        String mode = getIntent().getStringExtra("mode");
 
         // Stockage des valeurs dans le intent pour passer d'une activité à l'autre sans perdre les données
         Intent intent = new Intent(this, Localisation.class);
+        intent.putExtra("mode", mode);
+        intent.putExtra("eventNameTemp", eventNameTemp);
         intent.putExtra("eventName", eventName);
         intent.putExtra("eventDescription", eventDescription);
         intent.putExtra("eventLongitude", eventLongitude);
@@ -182,6 +207,24 @@ public class CreateEvent extends AppCompatActivity {
                     android.R.layout.simple_list_item_1, listGuest);
 
             listview.setAdapter(adapter);
+
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                    // Sur le clic d'un utilisateur, on le retire de la liste
+                    final String item = (String) parent.getItemAtPosition(position);
+                    view.animate().setDuration(1000).alpha(0).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Suppression de l'utilisateur dans la liste et refresh de l'affichage
+                            listGuest.remove(item);
+                            adapter.notifyDataSetChanged();
+                            view.setAlpha(1);
+                        }
+                    });
+                }
+            });
         } else {
             // Nouvelle liste
             listGuest = new ArrayList<String>();
@@ -321,7 +364,7 @@ public class CreateEvent extends AppCompatActivity {
             // Création de l'événement et récupération de l'id
             long idEvent = createEvent();
 
-            // Création de la liste des utilisateurs qui sont invités à l'événements
+            // Création de la liste des utilisateurs qui sont invités à l'événement
             createGuest(idEvent);
 
             // Affichage de la liste des événements
@@ -330,6 +373,45 @@ public class CreateEvent extends AppCompatActivity {
             // On affiche un message d'erreur
             errorMessage.setVisibility(View.VISIBLE);
         }
+    }
+
+    // Méthode qui permet de modifier un événement
+    public void modeModify(View view) {
+
+        // Création des variables à modifier dans la base de donnée
+        String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
+        String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
+        String eventLongitude = ((EditText)findViewById(R.id.createLong)).getText().toString();
+        String eventLatitude = ((EditText)findViewById(R.id.createLat)).getText().toString();
+        String date = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString() + "."
+                + (((Spinner)findViewById(R.id.monthEvent)).getSelectedItemPosition()+1) + "."
+                + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
+        String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString() + "."
+                + ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
+        int idEvent = getIdEvent(eventNameTemp);
+
+        // Modification dans la base de donnée
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(EventsContract.EventEntry.KEY_NAME, eventName);
+        values.put(EventsContract.EventEntry.KEY_DESCRIPTION, eventDescription);
+        values.put(EventsContract.EventEntry.KEY_LONGITUDE, eventLongitude);
+        values.put(EventsContract.EventEntry.KEY_LATITUDE, eventLatitude);
+        values.put(EventsContract.EventEntry.KEY_DATE, date);
+        values.put(EventsContract.EventEntry.KEY_TIME, hour);
+
+        db.update(EventsContract.EventEntry.TABLE_NAME, values, "id=" + idEvent, null);
+
+        // Suppression de la liste des utilisateurs qui sont invités à l'événement
+        db.delete(UsersInEventContract.UsersInEventEntry.TABLE_NAME, UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT + "=" + idEvent, null);
+
+        // Création de la liste des utilisateurs qui sont invités à l'événement
+        createGuest(idEvent);
+
+        // Retourner sur l'affichage de tous les évenements
+        Intent intent = new Intent(this, ShowEvent.class);
+        intent.putExtra("eventName", eventName);
+        startActivity(intent);
     }
 
     // Méthode qui insère l'événement dans la base de données et retourne son id
@@ -491,6 +573,21 @@ public class CreateEvent extends AppCompatActivity {
         Cursor c = db.rawQuery(sql, null);
         c.moveToFirst();
         return c.getInt(0);
+    }
+
+    // Méthode qui permet de retourner l'id de l'événement par son nom
+    private int getIdEvent(String eventName) {
+
+        // Requête SQL
+        Cursor cursor = null;
+        DbHelper mDbHelper = new DbHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String sql = "SELECT id FROM events WHERE name ='" + eventName + "';";
+        cursor = db.rawQuery(sql, null);
+
+        // Retour de l'id de l'événement
+        cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 
     // Méthode qui détermine si le nom de l'événement existe déjà dans la base de données
