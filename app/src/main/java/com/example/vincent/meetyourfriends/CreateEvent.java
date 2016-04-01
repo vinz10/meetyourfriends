@@ -355,7 +355,7 @@ public class CreateEvent extends AppCompatActivity {
         TextView errorMessage = (TextView)findViewById(R.id.createEventError);
 
         // Check si tous les éléments sont remplis et valides
-        if (infoChecked()) {
+        if (infoChecked("normal")) {
             // On masque le message d'erreur
             errorMessage.setVisibility(View.INVISIBLE);
 
@@ -378,40 +378,52 @@ public class CreateEvent extends AppCompatActivity {
     // Méthode qui permet de modifier un événement
     public void modeModify(View view) {
 
-        // Création des variables à modifier dans la base de donnée
-        String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
-        String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
-        String eventLongitude = ((EditText)findViewById(R.id.createLong)).getText().toString();
-        String eventLatitude = ((EditText)findViewById(R.id.createLat)).getText().toString();
-        String date = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString() + "."
-                + (((Spinner)findViewById(R.id.monthEvent)).getSelectedItemPosition()+1) + "."
-                + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
-        String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString() + "."
-                + ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
-        int idEvent = getIdEvent(eventNameTemp);
+        // Déclaration et affectation de errorMessage
+        TextView errorMessage = (TextView)findViewById(R.id.createEventError);
 
-        // Modification dans la base de donnée
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(EventsContract.EventEntry.KEY_NAME, eventName);
-        values.put(EventsContract.EventEntry.KEY_DESCRIPTION, eventDescription);
-        values.put(EventsContract.EventEntry.KEY_LONGITUDE, eventLongitude);
-        values.put(EventsContract.EventEntry.KEY_LATITUDE, eventLatitude);
-        values.put(EventsContract.EventEntry.KEY_DATE, date);
-        values.put(EventsContract.EventEntry.KEY_TIME, hour);
+        // Check si tous les éléments sont remplis et valides
+        if (infoChecked("modify")) {
+            // On masque le message d'erreur
+            errorMessage.setVisibility(View.INVISIBLE);
 
-        db.update(EventsContract.EventEntry.TABLE_NAME, values, "id=" + idEvent, null);
+            // Création des variables à modifier dans la base de donnée
+            String eventName = ((EditText)findViewById(R.id.createEventName)).getText().toString();
+            String eventDescription = ((EditText)findViewById(R.id.createEventDescription)).getText().toString();
+            String eventLongitude = ((EditText)findViewById(R.id.createLong)).getText().toString();
+            String eventLatitude = ((EditText)findViewById(R.id.createLat)).getText().toString();
+            String date = ((Spinner)findViewById(R.id.dayEvent)).getSelectedItem().toString() + "."
+                    + (((Spinner)findViewById(R.id.monthEvent)).getSelectedItemPosition()+1) + "."
+                    + ((Spinner)findViewById(R.id.yearEvent)).getSelectedItem().toString();
+            String hour = ((Spinner)findViewById(R.id.hourEvent)).getSelectedItem().toString() + "."
+                    + ((Spinner)findViewById(R.id.minuteEvent)).getSelectedItem().toString();
+            int idEvent = getIdEvent(eventNameTemp);
 
-        // Suppression de la liste des utilisateurs qui sont invités à l'événement
-        db.delete(UsersInEventContract.UsersInEventEntry.TABLE_NAME, UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT + "=" + idEvent, null);
+            // Modification dans la base de donnée
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(EventsContract.EventEntry.KEY_NAME, eventName);
+            values.put(EventsContract.EventEntry.KEY_DESCRIPTION, eventDescription);
+            values.put(EventsContract.EventEntry.KEY_LONGITUDE, eventLongitude);
+            values.put(EventsContract.EventEntry.KEY_LATITUDE, eventLatitude);
+            values.put(EventsContract.EventEntry.KEY_DATE, date);
+            values.put(EventsContract.EventEntry.KEY_TIME, hour);
 
-        // Création de la liste des utilisateurs qui sont invités à l'événement
-        createGuest(idEvent);
+            db.update(EventsContract.EventEntry.TABLE_NAME, values, "id=" + idEvent, null);
 
-        // Retourner sur l'affichage de tous les évenements
-        Intent intent = new Intent(this, ShowEvent.class);
-        intent.putExtra("eventName", eventName);
-        startActivity(intent);
+            // Suppression de la liste des utilisateurs qui sont invités à l'événement
+            db.delete(UsersInEventContract.UsersInEventEntry.TABLE_NAME, UsersInEventContract.UsersInEventEntry.KEY_ID_EVENT + "=" + idEvent, null);
+
+            // Création de la liste des utilisateurs qui sont invités à l'événement
+            createGuest(idEvent);
+
+            // Retourner sur l'affichage de tous les évenements
+            Intent intent = new Intent(this, ShowEvent.class);
+            intent.putExtra("eventName", eventName);
+            startActivity(intent);
+        } else {
+            // On affiche un message d'erreur
+            errorMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     // Méthode qui insère l'événement dans la base de données et retourne son id
@@ -471,15 +483,15 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     // Méthode qui détermine si les données sont remplies correctement
-    private boolean infoChecked() {
-        if(checkedEventName() && checkedDescription() && checkedLocation())
+    private boolean infoChecked(String mode) {
+        if(checkedEventName(mode) && checkedDescription() && checkedLocation())
             return true;
         else
             return false;
     }
 
     // Méthode qui détermine si le nom de l'événement est rempli et valide
-    private boolean checkedEventName() {
+    private boolean checkedEventName(String mode) {
 
         // Déclaration et affectation des variables
         TextView errorMessage = (TextView)findViewById(R.id.eventNameExist);
@@ -490,7 +502,7 @@ public class CreateEvent extends AppCompatActivity {
             return false;
         else {
             // Si l'événement existe déjà dans la base de données
-            if(ExistsEventName(eventName)) {
+            if(ExistsEventName(eventName, mode)) {
                 errorMessage.setVisibility(View.VISIBLE);
                 return false;
             } else {
@@ -591,12 +603,17 @@ public class CreateEvent extends AppCompatActivity {
     }
 
     // Méthode qui détermine si le nom de l'événement existe déjà dans la base de données
-    private boolean ExistsEventName(String eventName) {
+    private boolean ExistsEventName(String eventName, String mode) {
 
         Cursor cursor = null;
+        String sql = "";
         DbHelper mDbHelper = new DbHelper(this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        String sql = "SELECT id FROM events WHERE name ='" + eventName + "';";
+        if(mode.equals("normal")) {
+            sql = "SELECT id FROM events WHERE name ='" + eventName + "';";
+        } else {
+            sql = "SELECT id FROM events WHERE name ='" + eventName + "' AND name !='" + eventNameTemp + "';";
+        }
         cursor = db.rawQuery(sql, null);
 
         boolean exists = (cursor.getCount() > 0);
