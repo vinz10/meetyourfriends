@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.vincent.meetyourfriends">
+    package="com.example.vincent.meetyourfriends" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -23,25 +23,25 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <!-- Définition de la structure pour la barre d'actions -->
-
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Définition de la structure pour la barre d'actions -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_action_android"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        android:theme="@style/AppTheme" >
+        <activity android:name=".Login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".CreateAccount"
             android:label="@string/createAcountL"
-            android:parentActivityName=".Login">
+            android:parentActivityName=".Login" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
@@ -50,10 +50,13 @@
             android:name=".Events"
             android:label="@string/events" />
 
-        <!-- Informations Google Map
+        <!--
+             Informations Google Map
 
              Note that the API key is linked to the encryption key used to sign the APK. You need a different API key for each encryption key, including the
-             release key that is used to sign the APK for publishing. You can define the keys for the debug and release targets in src/debug/ and src/release/. -->
+             release key that is used to sign the APK for publishing. You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+
 
         <!-- Clé de l'API Google Map défini dans le fichier res/values/google_maps_api.xml -->
 
@@ -67,7 +70,7 @@
         <activity
             android:name=".CreateEvent"
             android:label="@string/createEvent"
-            android:parentActivityName=".Events">
+            android:parentActivityName=".Events" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Events" />
@@ -75,7 +78,7 @@
         <activity
             android:name=".ShowEvent"
             android:label="@string/showEvent"
-            android:parentActivityName=".Events">
+            android:parentActivityName=".Events" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Events" />
@@ -83,7 +86,7 @@
         <activity
             android:name=".ModifyAccount"
             android:label="@string/modifyAccount"
-            android:parentActivityName=".Events">
+            android:parentActivityName=".Events" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Events" />
@@ -91,7 +94,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".Events">
+            android:parentActivityName=".Events" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Events" />
