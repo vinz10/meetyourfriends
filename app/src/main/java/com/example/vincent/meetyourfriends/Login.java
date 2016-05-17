@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,6 +46,8 @@ public class Login extends AppCompatActivity {
         changeLang(langPref);
 
         setContentView(R.layout.activity_login);
+
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Vincent"));
     }
 
     // Méthode qui change la langue de l'application
