@@ -23,8 +23,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Définition de la structure pour la barre d'actions -->
+    <!-- Définition de la structure pour la barre d'actions -->
 
     <application
         android:allowBackup="true"
